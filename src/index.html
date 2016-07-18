@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Improviser</title>
+    <meta name="viewport" content="width=device-width,initial-scale = 1.0,maximum-scale = 1.0,user-scalable=no" />
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="page">
+        <h1>Improviser</h1>
+        <div>
+            <h2>Master settings</h2>
+            <label>Tempo: </label>
+            <input type="number" min="0" max="200" value="60" class="tempo" /><br />
+            <label>Beats in a a bar: </label>
+            <input type="number" min="0" max="200" value="60" class="biab" /><br />
+            <label>Sub Beats: </label>
+            <input type="number" min="0" max="200" value="60" class="subBeats" /><br />
+        </div>
+
+        <div>
+            <h2>Sequence Settings</h2>
+            <div>
+                <button class="start">Start</button>
+                <button class="stop">STOP</button><br />
+                <label for="chord1">Chord 1: </label>
+                <select name="chord1" id="c1-root">
+                    <option value="C" selected>C</option>
+                    <option value="C#">C#</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="B">B</option>
+                </select>
+                <select name="" id="c1-harmony">
+                    <option value="major" selected>major</option>
+                    <option value="minor">minor</option>
+                </select><br />
+                <label for="chord2">Chord 2: </label>
+                <select name="chord2" id="c2-root">
+                    <option value="C">C</option>
+                    <option value="C#">C#</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                    <option value="A" selected>A</option>
+                    <option value="A#">A#</option>
+                    <option value="B">B</option>
+                </select>
+                <select name="" id="c2-harmony">
+                    <option value="major">major</option>
+                    <option value="minor" selected>minor</option>
+                </select><br />
+                <label for="chord3">Chord 3: </label>
+                <select name="chord3" id="c3-root">
+                    <option value="C">C</option>
+                    <option value="C#">C#</option>
+                    <option value="D" selected>D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="B">B</option>
+                </select>
+                <select name="" id="c3-harmony">
+                    <option value="major">major</option>
+                    <option value="minor" selected>minor</option>
+                </select><br />
+                <label for="chord4">Chord 4: </label>
+                <select name="chord4" id="c4-root">
+                    <option value="C">C</option>
+                    <option value="C#">C#</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G" selected>G</option>
+                    <option value="G#">G#</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="B">B</option>
+                </select>
+                <select name="" id="c4-harmony">
+                    <option value="major" selected>major</option>
+                    <option value="minor">minor</option>
+                </select><br />
+            </div>
+        </div>
+
+        <div>
+            <h2>Synth Settings</h2>
+            <label>Volume: </label>
+            <input type="range" min="0" max="80" value="20" class="slider" /><br />
+            <label>Attack Time (ms): </label>
+            <input type="number" min="0" max="3000" value="10" class="attackTime" /><br />
+            <label>Release Time (ms): </label>
+            <input type="number" min="0" max="3000" value="100" class="releaseTime" /><br />
+            <h3>Midi Input Device: </h3>
+            <table id="midi_source">
+                <tr>
+                    <td>Name</td>
+                    <td class="name"></td>
+                </tr>
+                <tr>
+                    <td>Manufacturer</td>
+                    <td class="manufacturer"></td>
+                </tr>
+                <tr>
+                    <td>State</td>
+                    <td class="state"></td>
+                </tr>
+            </table>
+            <div id="key_data"></div>
+        </div>
+    </div>
+
+    <script src="/app_bundle.js"></script>
+</body>
+
+</html>

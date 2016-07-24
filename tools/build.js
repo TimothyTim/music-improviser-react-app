@@ -1,11 +1,24 @@
 // More info on Webpack's Node API here: https://webpack.github.io/docs/node.js-api.html
 // Allowing console calls below since this is a build file.
+require('dotenv').config();
+const fs = require('fs');
 const webpack = require('webpack');
 const ncp = require('ncp');
 const config = require('../webpack.prod.config.js');
 const chalk = require('./chalkConfig');
 
 process.env.NODE_ENV = 'production'; // this assures React is built in prod mode and that the Babel dev config doesn't apply.
+
+console.log(chalk.processing('Generating js config file...'));
+
+fs.writeFileSync('src/constants/config.js', "export default { GOOGLE_TRACKING_ID: '" + process.env.GOOGLE_TRACKING_ID + "' };", 'utf8', (writeError) => {
+  if (writeError) {
+    return console.log(chalk.error(writeError));
+  }
+  console.log(chalk.success('config written to /src/constants'));
+
+  return writeError;
+});
 
 console.log(chalk.processing('Generating minified bundle for production via Webpack. This will take a moment...'));
 

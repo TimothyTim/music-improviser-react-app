@@ -1,6 +1,8 @@
+import config from '../constants/config.js';
+
 module.exports = {
     init: () => {
-        if (process.env.GOOGLE_TRACKING_ID) {
+        if (config.GOOGLE_TRACKING_ID) {
             /* eslint-disable */
             // Google Analytics
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -8,7 +10,7 @@ module.exports = {
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-            ga('create', process.env.GOOGLE_TRACKING_ID, 'auto');
+            ga('create', config.GOOGLE_TRACKING_ID, 'auto');
             ga('send', 'pageview');
             /* eslint-enable */
         }

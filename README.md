@@ -1,6 +1,6 @@
 ## The Music Improviser
 
-### Installing dependencies
+Installing dependencies
 
 ```
 npm install

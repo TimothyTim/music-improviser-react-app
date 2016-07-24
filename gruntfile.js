@@ -22,14 +22,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jshint: {
-            all: [
-                'Gruntfile.js', 'public/javascripts/dist/output.js'
-            ],
-            options: {
-                jshintrc: '.jshintrc'
-            }
-        },
         watch: {
             scripts: {
                 files: ['./public/sass/*.scss'],

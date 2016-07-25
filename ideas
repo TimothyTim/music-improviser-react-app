@@ -1,0 +1,85 @@
+<label>Beats in a a bar: </label>
+<input type="number" min="0" max="200" value="4" class="biab" /><br />
+<label>Sub Beats: </label>
+
+<div>
+    <h2>Sequence Settings</h2>
+    <div>
+        <label for="chord1">Chord 1: </label>
+        <select name="chord1" id="c1-root">
+            <option value="C" selected>C</option>
+            <option value="C#">C#</option>
+            <option value="D">D</option>
+            <option value="D#">D#</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="F#">F#</option>
+            <option value="G">G</option>
+            <option value="G#">G#</option>
+            <option value="A">A</option>
+            <option value="A#">A#</option>
+            <option value="B">B</option>
+        </select>
+        <select name="" id="c1-harmony">
+            <option value="major" selected>major</option>
+            <option value="minor">minor</option>
+        </select><br />
+        <label for="chord2">Chord 2: </label>
+        <select name="chord2" id="c2-root">
+            <option value="C">C</option>
+            <option value="C#">C#</option>
+            <option value="D">D</option>
+            <option value="D#">D#</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="F#">F#</option>
+            <option value="G">G</option>
+            <option value="G#">G#</option>
+            <option value="A" selected>A</option>
+            <option value="A#">A#</option>
+            <option value="B">B</option>
+        </select>
+        <select name="" id="c2-harmony">
+            <option value="major">major</option>
+            <option value="minor" selected>minor</option>
+        </select><br />
+        <label for="chord3">Chord 3: </label>
+        <select name="chord3" id="c3-root">
+            <option value="C">C</option>
+            <option value="C#">C#</option>
+            <option value="D" selected>D</option>
+            <option value="D#">D#</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="F#">F#</option>
+            <option value="G">G</option>
+            <option value="G#">G#</option>
+            <option value="A">A</option>
+            <option value="A#">A#</option>
+            <option value="B">B</option>
+        </select>
+        <select name="" id="c3-harmony">
+            <option value="major">major</option>
+            <option value="minor" selected>minor</option>
+        </select><br />
+        <label for="chord4">Chord 4: </label>
+        <select name="chord4" id="c4-root">
+            <option value="C">C</option>
+            <option value="C#">C#</option>
+            <option value="D">D</option>
+            <option value="D#">D#</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="F#">F#</option>
+            <option value="G" selected>G</option>
+            <option value="G#">G#</option>
+            <option value="A">A</option>
+            <option value="A#">A#</option>
+            <option value="B">B</option>
+        </select>
+        <select name="" id="c4-harmony">
+            <option value="major" selected>major</option>
+            <option value="minor">minor</option>
+        </select><br />
+    </div>
+</div>

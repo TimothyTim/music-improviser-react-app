@@ -9,14 +9,16 @@ html, body {
 
 #page {
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 20px;
     position: relative;
     width: 100%;
     height: 100%;
+    min-height: 400px;
 }
 
 .app {
     height: 100%;
+    position: relative;
 }
 
 .main {
@@ -45,13 +47,16 @@ html, body {
         }
 
         &__icon {
-            
+
         }
     }
 }
 
 .settings {
-
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    left: 0;
 }
 
 .hide {

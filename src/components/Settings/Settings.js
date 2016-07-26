@@ -14,11 +14,11 @@ class Settings extends React.Component {
                 <div>
                     <h2>Synth Settings</h2>
                     <label>Volume: </label>
-                    <input type="range" min="0" max="80" value="20" className="slider" /><br />
+                    <input type="range" min="0" max="80" defaultValue="20" className="slider" /><br />
                     <label>Attack Time (ms): </label>
-                    <input type="number" min="0" max="3000" value="10" className="attackTime" /><br />
+                    <input type="number" min="0" max="3000" defaultValue="10" className="attackTime" /><br />
                     <label>Release Time (ms): </label>
-                    <input type="number" min="0" max="3000" value="100" className="releaseTime" /><br />
+                    <input type="number" min="0" max="3000" defaultValue="100" className="releaseTime" /><br />
                     <h3>Midi Input Device: </h3>
                     <table id="midi_source">
                         <tbody>

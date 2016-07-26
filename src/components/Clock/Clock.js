@@ -71,7 +71,6 @@ class Clock {
 
             // Needs to sit after tick so that snapshot will have updated
             this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
-            // Improvise(); // calls Player for audio and Draw for visuals
         }
         this.frame = requestAnimationFrame(this.schedule.bind(this)); // call for next sub beat
     }

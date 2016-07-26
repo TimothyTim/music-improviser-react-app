@@ -1,16 +1,17 @@
 import _ from 'lodash';
+import Lead from './Lead.js';
 import Player from '../Player/Player.js';
 import Chord from './Model/Chord.js';
 import chordSequence from './Model/ChordSequences.js';
 
 class RhythmMaker {
-    constructor(snapShot, context) {
+    constructor(snapShot) {
         let _this = this;
-        this.context = context;
         this.snapShot = snapShot;
         this.currentBeat = null;
         this.countIn = true;
         this.player = new Player();
+        this.lead = new Lead();
         this.currentChord = null;
         this.setupSequence();
 
@@ -22,38 +23,41 @@ class RhythmMaker {
 
     next(beatObject) {
         this.currentBeat = beatObject;
+        let {countIn, snapShot, currentBeat} = this;
+        const {barIndex, beatIndex, subBeatIndex} = snapShot;
+        const {nextBarIndex, nextBeatIndex, nextSubBeatIndex} = currentBeat;
 
-        if (!_.isEqual(this.snapShot, this.currentBeat)) {
-            console.log(this.currentBeat);
+        if (!_.isEqual(snapShot, currentBeat)) {
+            console.log(currentBeat);
 
-            if (this.snapShot.barIndex !== this.currentBeat.barIndex) {
+            if (barIndex !== nextBarIndex) {
                 // each bar
-                if (this.countIn && this.currentBeat.barIndex === 1) {
-                    this.countIn = false;
+                if (countIn && nextBarIndex === 1) {
+                    countIn = false;
                 }
 
-                if (!this.countIn) {
+                if (!countIn) {
                     this.nextBar();
                 }
             }
 
-            if (this.snapShot.beatIndex !== this.currentBeat.beatIndex) {
+            if (beatIndex !== nextBeatIndex) {
 
                 // each beat
-                if (!this.countIn) {
+                if (!countIn) {
                     this.nextBeat();
                 } else {
                     this.nextCountInBeat();
                 }
             }
 
-            if (this.snapShot.subBeatIndex !== this.currentBeat.subBeatIndex && !this.countIn) {
+            if (subBeatIndex !== nextSubBeatIndex && !countIn) {
                 // each sub-beat
                 // Maybe bass line
                 this.nextSubBeat();
             }
 
-            this.snapShot = this.currentBeat;
+            snapShot = currentBeat;
         } else {
             console.log('duplicate beats triggered');
         }
@@ -72,6 +76,8 @@ class RhythmMaker {
         if (this.isCurrentChordFinished()) {
             this.stopCurrentChord();
         }
+
+        this.lead.next();
     }
 
     isCurrentChordFinished() {

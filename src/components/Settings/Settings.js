@@ -3,9 +3,10 @@ import React, {PropTypes} from 'react';
 class Settings extends React.Component {
 
     render() {
-        const {tempo, changeTempo} = this.props;
+        const {tempo, changeTempo, isOpen} = this.props;
+        const hideClass = isOpen ? 'show' : 'hide';
         return (
-            <div className="settings">
+            <div className={`tool settings ${hideClass}`}>
                 <div>
                     <h2>Master settings</h2>
                     <label>Tempo: </label>
@@ -45,7 +46,8 @@ class Settings extends React.Component {
 
 Settings.propTypes = {
     tempo: PropTypes.number.isRequired,
-    changeTempo: PropTypes.func.isRequired
+    changeTempo: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired
 };
 
 export default Settings;

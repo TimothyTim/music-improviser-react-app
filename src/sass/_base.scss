@@ -1,7 +1,7 @@
 // Default Page Styling
 
 html, body {
-    background-color: $palette-silver;
+    background-color: $palette-background;
     height: 100%;
     width: 100%;
     font-size: 16px;
@@ -9,7 +9,7 @@ html, body {
 
 #page {
     margin: 0 auto;
-    padding: 20px;
+    padding: 5px 20px;
     position: relative;
     width: 100%;
     height: 100%;
@@ -52,11 +52,36 @@ html, body {
     }
 }
 
-.settings {
+.toolbar {
     position: absolute;
-    display: inline-block;
     bottom: 0;
     left: 0;
+
+    &__button {
+        height: 40px;
+        width: 40px;
+        font-size: 2em;
+
+        &.active i {
+            transform: rotate(-30deg);
+        }
+
+        i {
+            transition: transform 0.2s linear;
+            transform: rotate(0deg);
+        }
+    }
+}
+
+.tool {
+    position: absolute;
+    display: inline-block;
+    bottom: 40px;
+    padding: 16px;
+    left: 0;
+    background-color: $palette-clouds;
+    border: 1px solid rgba($palette-midnight-blue, 0.1);
+    border-radius: 2px;
 }
 
 .hide {

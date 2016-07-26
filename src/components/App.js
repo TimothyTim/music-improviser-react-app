@@ -38,7 +38,17 @@ class App extends React.Component {
     }
 
     changeTempo(e) {
-        this.clock.setTempo(e.currentTarget.value);
+        const upperLimit = 200;
+        const lowerLimit = 40;
+        let {value} = e.currentTarget;
+
+        if (value < lowerLimit) {
+            value = lowerLimit;
+        } else if (value > upperLimit) {
+            value = upperLimit;
+        }
+
+        this.clock.setTempo(value);
     }
 
     handleKeyDown(e) {

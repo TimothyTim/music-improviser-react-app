@@ -48,7 +48,6 @@ function onInputMessage(type, note) {
     myPlayer.trigger(type, [note], 'myMonoSynth');
 
     // trigger visual change
-    log("trigger visual change");
 }
 
 const Inputs = {

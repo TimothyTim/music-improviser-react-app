@@ -23,41 +23,41 @@ class RhythmMaker {
 
     next(beatObject) {
         this.currentBeat = beatObject;
-        let {countIn, snapShot, currentBeat} = this;
-        const {barIndex, beatIndex, subBeatIndex} = snapShot;
-        const {nextBarIndex, nextBeatIndex, nextSubBeatIndex} = currentBeat;
+        let {barIndex, beatIndex, subBeatIndex} = this.snapShot;
+        const nextBarIndex = this.currentBeat.barIndex;
+        const nextBeatIndex = this.currentBeat.beatIndex;
+        const nextSubBeatIndex = this.currentBeat.subBeatIndex;
 
-        if (!_.isEqual(snapShot, currentBeat)) {
-            console.log(currentBeat);
+        console.log(beatIndex, nextBeatIndex);
+
+        if (!_.isEqual(this.snapShot, this.currentBeat)) {
 
             if (barIndex !== nextBarIndex) {
                 // each bar
-                if (countIn && nextBarIndex === 1) {
-                    countIn = false;
+                if (this.countIn && nextBarIndex === 1) {
+                    this.countIn = false;
                 }
 
-                if (!countIn) {
+                if (!this.countIn) {
                     this.nextBar();
                 }
             }
 
             if (beatIndex !== nextBeatIndex) {
-
                 // each beat
-                if (!countIn) {
+                if (!this.countIn) {
                     this.nextBeat();
                 } else {
                     this.nextCountInBeat();
                 }
             }
 
-            if (subBeatIndex !== nextSubBeatIndex && !countIn) {
+            if (subBeatIndex !== nextSubBeatIndex && !this.countIn) {
                 // each sub-beat
-                // Maybe bass line
                 this.nextSubBeat();
             }
 
-            snapShot = currentBeat;
+            this.snapShot = this.currentBeat;
         } else {
             console.log('duplicate beats triggered');
         }
@@ -117,6 +117,8 @@ class RhythmMaker {
             this.stopCurrentChord();
             this.setupSequence();
         }
+
+        this.lead.stop();
     }
 
     setupSequence() {

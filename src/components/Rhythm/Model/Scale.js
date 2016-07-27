@@ -1,26 +1,26 @@
+/* eslint-disable */
 import intvl from './Interval.js';
-
-let Scale = {};
+import * as scales from '../../../constants/scales.js';
 
 function calculateScaleByIntervals(scaleByIntervals, note) {
   let scale = [];
-  let newNote = note;
+  let newNote = Object.assign({}, note);
   if (!note.octave) note.octave = 3;
 
   scaleByIntervals.forEach((interval) => {
-    newNote = intvl.getNote(newNote, interval);
+    let noteCopy = Object.assign({}, newNote);
+    newNote = intvl.getNote(noteCopy, interval);
     scale.push(newNote);
   });
 
   return scale;
 }
 
-Scale.chromatic = (note) => {
-  return calculateScaleByIntervals([0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], note);
-};
+let Scale = {};
 
-Scale.pentatonic = (note) => {
-  return calculateScaleByIntervals([0, 3, 2, 2, 3], note);
+Scale.get = (name, note) => {
+  return calculateScaleByIntervals(scales[name], note);
 };
 
 export default Scale;
+/* eslint-enable */

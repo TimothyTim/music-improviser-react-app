@@ -48,6 +48,8 @@ class App extends React.Component {
             value = upperLimit;
         }
 
+        console.log(value);
+
         this.clock.setTempo(value);
     }
 

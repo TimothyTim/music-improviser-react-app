@@ -1,4 +1,4 @@
-import Chromatic from './Chromatic';
+import Notes from '../../../constants/notes';
 
 function filterInterval(interval) {
   if (interval > 12) {
@@ -11,7 +11,7 @@ function filterInterval(interval) {
 }
 
 function getNextNote(note, interval) {
-  const indexOfNote = Chromatic.indexOf(note.name);
+  const indexOfNote = Notes.indexOf(note.name);
   let octaveOfNextNote = note.octave;
   let indexOfNextNote = indexOfNote + interval;
 
@@ -25,13 +25,13 @@ function getNextNote(note, interval) {
     octaveOfNextNote += 1;
   }
 
-  while(indexOfNextNote <= 12) {
+  while(indexOfNextNote <= -12) {
     indexOfNextNote += 12;
     octaveOfNextNote -= 1;
   }
 
   return {
-    name: Chromatic[indexOfNextNote],
+    name: Notes[indexOfNextNote],
     octave: octaveOfNextNote
   };
 }

@@ -2,20 +2,25 @@ import intvl from './Interval.js';
 
 let Scale = {};
 
-Scale.chromatic = (note) => {
-  let scaleByIntervals = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+function calculateScaleByIntervals(scaleByIntervals, note) {
   let scale = [];
+  let newNote = note;
   if (!note.octave) note.octave = 3;
 
   scaleByIntervals.forEach((interval) => {
-    scale.push(intvl.getNote(note, interval));
+    newNote = intvl.getNote(newNote, interval);
+    scale.push(newNote);
   });
 
   return scale;
 }
 
-Scale.pentatonic = () => {
+Scale.chromatic = (note) => {
+  return calculateScaleByIntervals([0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], note);
+};
 
-}
+Scale.pentatonic = (note) => {
+  return calculateScaleByIntervals([0, 3, 2, 2, 3], note);
+};
 
 export default Scale;

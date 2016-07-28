@@ -15,10 +15,11 @@ class Lead {
         this.noteName = this.scale[this.currentIndex];
         this.bps = bps;
         this.stopped = false;
+        this.pushPull = 200;
     }
 
     next() {
-        if (this.percentChance(80)) {
+        if (this.percentChance(40)) {
             this.calculateNewNoteIndex();
             this.playNote();
         }
@@ -66,20 +67,13 @@ class Lead {
     playNote() {
         this.stopped = false;
         const newNote = this.scale[this.currentIndex];
-        const _this = this;
         this.noteName = newNote.name + newNote.octave;
-
         this.player.triggerNote('on', this.noteName);
-
-        setTimeout(() => {
-            if (!_this.stopped) {
-                _this.stop();
-            }
-        }, this.noteDuration());
+        this.player.triggerNote('off', _.clone(this.noteName), this.noteDuration());
     }
 
     noteDuration() {
-        return (this.bps*1000) / 5; //less than a semi tone
+        return (this.bps*1000) * 2 + this.pushPull;
     }
 
     stop() {

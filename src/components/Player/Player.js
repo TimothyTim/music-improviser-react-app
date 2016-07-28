@@ -75,7 +75,8 @@ class Player {
         });
     }
 
-    triggerNote(action, name) {
+    triggerNote(action, name, delay) {
+        if (!delay) delay = 0;
         let note = {
             name: name,
             number: music.noteNameToNoteNumber(name),
@@ -85,19 +86,21 @@ class Player {
         const synth = this.myMonoSynth;
         synth.stopAll();
 
-        switch(action) {
-            case 'on':
-                synth.start(note);
-                break;
-            case 'off':
-                synth.stop(note);
-                break;
-            case 'stop':
-                synth.stopAll();
-                break;
-            default:
-                alert('Unrecognised player trigger');
-        }
+        setTimeout(() => {
+            switch(action) {
+                case 'on':
+                    synth.start(note);
+                    break;
+                case 'off':
+                    synth.stop(note);
+                    break;
+                case 'stop':
+                    synth.stopAll();
+                    break;
+                default:
+                    alert('Unrecognised player trigger');
+            }
+        }, delay);
     }
 
     addFrequencyToNote(note) {

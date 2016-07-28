@@ -8,7 +8,6 @@ class Chord {
         this.masterVolume = $('.slider');
         this.startPoint = snapShot;
         this.endPoint = this.getEndPoint();
-        console.log(this.endPoint);
     }
 
     getNotes(triggerOn) {
@@ -63,8 +62,6 @@ class Chord {
                 newEndPoint.barIndex = 1;
             }
         }
-
-        console.log(newEndPoint);
 
         return newEndPoint;
     }

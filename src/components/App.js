@@ -91,13 +91,14 @@ class App extends React.Component {
 
     render() {
         const {isPlaying, tempo, activeTool, tools} = this.state;
-        const playIconClass = isPlaying ? 'pause' : 'play';
+        const playClass = isPlaying ? 'pause' : 'play';
+        const mainActive = isPlaying ? 'active' : '';
 
         return (
             <div className="app">
                 <div className="main">
-                    <button className="main__start" onClick={this.togglePlay}>
-                        <i className={`fa fa-${playIconClass}-circle`} aria-hidden="true"></i>
+                    <button className={`main__start ${mainActive}`} onClick={this.togglePlay}>
+                        <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
                     </button>
                 </div>
                 <Toolbar tools={tools} activeTool={activeTool} toggleTool={this.toggleTool} />

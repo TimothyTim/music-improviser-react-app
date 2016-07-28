@@ -5,7 +5,7 @@ import Player from '../Player/Player.js';
 const key = 'C';
 
 class Lead {
-    constructor() {
+    constructor(bps) {
         this.scale = Scale.get('diatonic', {
             name: key,
             octave: 3
@@ -13,10 +13,12 @@ class Lead {
         this.player = new Player();
         this.currentIndex = 7;
         this.noteName = this.scale[this.currentIndex];
+        this.bps = bps;
+        this.stopped = false;
     }
 
     next() {
-        if (this.percentChance(20)) {
+        if (this.percentChance(80)) {
             this.calculateNewNoteIndex();
             this.playNote();
         }
@@ -62,14 +64,31 @@ class Lead {
     }
 
     playNote() {
+        this.stopped = false;
         const newNote = this.scale[this.currentIndex];
+        const _this = this;
         this.noteName = newNote.name + newNote.octave;
 
         this.player.triggerNote('on', this.noteName);
+
+        setTimeout(() => {
+            if (!_this.stopped) {
+                _this.stop();
+            }
+        }, this.noteDuration());
+    }
+
+    noteDuration() {
+        return (this.bps*1000) / 5; //less than a semi tone
     }
 
     stop() {
-        this.player.triggerNote('off', this.noteName);
+        this.player.triggerNote('stop');
+        this.stopped = true;
+    }
+
+    updateTempo(bps) {
+        this.bps = bps;
     }
 }
 

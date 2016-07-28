@@ -5,15 +5,16 @@ import Chord from './Model/Chord.js';
 import chordSequence from './Model/ChordSequences.js';
 
 class RhythmMaker {
-    constructor(snapShot) {
+    constructor(snapShot, bps) {
         let _this = this;
         this.snapShot = snapShot;
         this.currentBeat = null;
         this.countIn = true;
         this.player = new Player();
-        this.lead = new Lead();
+        this.lead = new Lead(bps);
         this.currentChord = null;
         this.setupSequence();
+        this.updateTempo(bps);
 
         this.player.loadMulti(['/public/audio/kick.wav', '/public/audio/snap.wav'], function(bufferList) {
             _this.kick = bufferList[0];
@@ -59,7 +60,7 @@ class RhythmMaker {
 
             this.snapShot = this.currentBeat;
         } else {
-            console.log('duplicate beats triggered');
+            console.error('duplicate beats triggered');
         }
     }
 
@@ -133,6 +134,11 @@ class RhythmMaker {
 
     nextCountInBeat() {
         this.player.play(this.snap);
+    }
+
+    updateTempo(bps) {
+        this.bps = bps;
+        this.lead.updateTempo(this.bps);
     }
 }
 

@@ -83,6 +83,7 @@ class Player {
             gain: action === 'on' ? 0.4 : 0
         };
         const synth = this.myMonoSynth;
+        synth.stopAll();
 
         switch(action) {
             case 'on':
@@ -90,6 +91,9 @@ class Player {
                 break;
             case 'off':
                 synth.stop(note);
+                break;
+            case 'stop':
+                synth.stopAll();
                 break;
             default:
                 alert('Unrecognised player trigger');

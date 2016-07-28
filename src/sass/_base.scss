@@ -42,7 +42,7 @@ html, body {
         transition: background-color 0.3s ease-out;
         font-size: 6em;
 
-        &:hover {
+        &:hover, &.active {
             background-color: $palette-emerald-dark;
         }
 

@@ -1,18 +1,20 @@
 import _ from 'lodash';
+import Lead from './Lead.js';
 import Player from '../Player/Player.js';
 import Chord from './Model/Chord.js';
 import chordSequence from './Model/ChordSequences.js';
 
 class RhythmMaker {
-    constructor(snapShot, context) {
+    constructor(snapShot, bps) {
         let _this = this;
-        this.context = context;
         this.snapShot = snapShot;
         this.currentBeat = null;
         this.countIn = true;
         this.player = new Player();
+        this.lead = new Lead(bps);
         this.currentChord = null;
         this.setupSequence();
+        this.updateTempo(bps);
 
         this.player.loadMulti(['/public/audio/kick.wav', '/public/audio/snap.wav'], function(bufferList) {
             _this.kick = bufferList[0];
@@ -22,13 +24,18 @@ class RhythmMaker {
 
     next(beatObject) {
         this.currentBeat = beatObject;
+        let {barIndex, beatIndex, subBeatIndex} = this.snapShot;
+        const nextBarIndex = this.currentBeat.barIndex;
+        const nextBeatIndex = this.currentBeat.beatIndex;
+        const nextSubBeatIndex = this.currentBeat.subBeatIndex;
+
+        console.log(beatIndex, nextBeatIndex);
 
         if (!_.isEqual(this.snapShot, this.currentBeat)) {
-            console.log(this.currentBeat);
 
-            if (this.snapShot.barIndex !== this.currentBeat.barIndex) {
+            if (barIndex !== nextBarIndex) {
                 // each bar
-                if (this.countIn && this.currentBeat.barIndex === 1) {
+                if (this.countIn && nextBarIndex === 1) {
                     this.countIn = false;
                 }
 
@@ -37,8 +44,7 @@ class RhythmMaker {
                 }
             }
 
-            if (this.snapShot.beatIndex !== this.currentBeat.beatIndex) {
-
+            if (beatIndex !== nextBeatIndex) {
                 // each beat
                 if (!this.countIn) {
                     this.nextBeat();
@@ -47,15 +53,14 @@ class RhythmMaker {
                 }
             }
 
-            if (this.snapShot.subBeatIndex !== this.currentBeat.subBeatIndex && !this.countIn) {
+            if (subBeatIndex !== nextSubBeatIndex && !this.countIn) {
                 // each sub-beat
-                // Maybe bass line
                 this.nextSubBeat();
             }
 
             this.snapShot = this.currentBeat;
         } else {
-            console.log('duplicate beats triggered');
+            console.error('duplicate beats triggered');
         }
     }
 
@@ -72,6 +77,8 @@ class RhythmMaker {
         if (this.isCurrentChordFinished()) {
             this.stopCurrentChord();
         }
+
+        this.lead.next();
     }
 
     isCurrentChordFinished() {
@@ -111,6 +118,8 @@ class RhythmMaker {
             this.stopCurrentChord();
             this.setupSequence();
         }
+
+        this.lead.stop();
     }
 
     setupSequence() {
@@ -125,6 +134,11 @@ class RhythmMaker {
 
     nextCountInBeat() {
         this.player.play(this.snap);
+    }
+
+    updateTempo(bps) {
+        this.bps = bps;
+        this.lead.updateTempo(this.bps);
     }
 }
 

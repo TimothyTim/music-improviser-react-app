@@ -25,7 +25,7 @@ class Clock {
         this.startTime = 0; // not necessarily needed
         this.frame = null;
         this.context = new AudioContext();
-        this.rhythmMaker = new RhythmMaker(_.cloneDeep(this.rhythmicPosition));
+        this.rhythmMaker = new RhythmMaker(_.cloneDeep(this.rhythmicPosition), this.beatPerSecond);
     }
 
     start() {
@@ -59,6 +59,7 @@ class Clock {
 
     setTempo(newTempo) {
         this.beatPerSecond = 60 / newTempo;
+        this.rhythmMaker.updateTempo(this.beatPerSecond);
     }
 
     isTicking() {
@@ -71,7 +72,6 @@ class Clock {
 
             // Needs to sit after tick so that snapshot will have updated
             this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
-            // Improvise(); // calls Player for audio and Draw for visuals
         }
         this.frame = requestAnimationFrame(this.schedule.bind(this)); // call for next sub beat
     }

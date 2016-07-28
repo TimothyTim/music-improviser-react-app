@@ -25,22 +25,24 @@ MonoSynth.prototype.start = function(note) {
     const masterVolume = this.masterVolume.val() / 100;
     const noteGain = note.gain * masterVolume;
 
-    this.notesPlaying[note.frequency] = true;
+    this.notesPlaying[note.name] = true;
     this.osc.frequency.value = note.frequency;
-
     this.oscGain.gain.value = noteGain;
 };
 
 MonoSynth.prototype.stop = function(note) {
-    delete this.notesPlaying[note.frequency];
+    delete this.notesPlaying[note.name];
     if (this.isEmpty(this.notesPlaying)) {
         this.oscGain.gain.value = note.gain;
     }
 };
 
-MonoSynth.prototype.stopNotes = function() {
-    this.osc.stop(0);
-    this.osc = null;
+MonoSynth.prototype.stopAll = function() {
+    for (let note in this.notesPlaying) {
+        delete this.notesPlaying[note];
+    }
+
+    this.oscGain.gain.value = 0;
 };
 
 export default MonoSynth;

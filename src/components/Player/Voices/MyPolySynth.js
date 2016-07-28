@@ -45,13 +45,20 @@ MyPolySynth.prototype.stop = function(note) {
         note.gain,
         currTime + releaseTime
     );
+};
 
-    // clean up
-    // setTimeout(function() {
-    //     _this.osc[note.name].stop(0);
-    //     _this.osc[note.name] = null;
-    //     _this.oscGain[note.name] = null;
-    // }, this.decayTime+1);
+MyPolySynth.prototype.stopAll = function() {
+    const releaseTime = this.releaseTime.val() / 1000;
+    const currTime = this.context.currentTime;
+
+    for (let note in this.oscGain) {
+        this.oscGain[note].gain.linearRampToValueAtTime(
+            0,
+            currTime + releaseTime
+        );
+
+        this.osc[note].stop(0);
+    }
 };
 
 export default MyPolySynth;

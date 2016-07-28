@@ -75,6 +75,31 @@ class Player {
         });
     }
 
+    triggerNote(action, name) {
+        let note = {
+            name: name,
+            number: music.noteNameToNoteNumber(name),
+            frequency: music.noteNameToFrequency(name),
+            gain: action === 'on' ? 0.4 : 0
+        };
+        const synth = this.myMonoSynth;
+        synth.stopAll();
+
+        switch(action) {
+            case 'on':
+                synth.start(note);
+                break;
+            case 'off':
+                synth.stop(note);
+                break;
+            case 'stop':
+                synth.stopAll();
+                break;
+            default:
+                alert('Unrecognised player trigger');
+        }
+    }
+
     addFrequencyToNote(note) {
         return _.extend({}, note, {
             frequency: music.noteNumberToFrequency(note.number)

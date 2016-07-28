@@ -6,7 +6,7 @@ const key = 'C';
 
 class Lead {
     constructor(bps) {
-        this.scale = Scale.get('diatonic', {
+        this.scale = Scale.get('pentatonic', {
             name: key,
             octave: 3
         });
@@ -58,7 +58,7 @@ class Lead {
 
     randomIndex() {
         const rand = this.randomNumber();
-        const maxIndexJump = 4;
+        const maxIndexJump = 2;
         const randIndex = Math.round(rand * maxIndexJump);
 
         return randIndex;

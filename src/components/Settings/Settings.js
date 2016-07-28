@@ -19,7 +19,7 @@ class Settings extends React.Component {
                     <label>Attack Time (ms): </label>
                     <input type="number" min="0" max="3000" defaultValue="10" className="attackTime" /><br />
                     <label>Release Time (ms): </label>
-                    <input type="number" min="0" max="3000" defaultValue="100" className="releaseTime" /><br />
+                    <input type="number" min="0" max="3000" defaultValue="200" className="releaseTime" /><br />
                     <h3>Midi Input Device: </h3>
                     <table id="midi_source">
                         <tbody>

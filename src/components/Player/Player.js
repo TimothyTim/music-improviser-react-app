@@ -46,6 +46,7 @@ class Player {
         const gainNode = this.context.createGain();
         source.connect(gainNode);
         gainNode.connect(this.context.destination);
+        gainNode.gain.value = 0.2;
         source.start(0);
 
         this.gainNode = gainNode;

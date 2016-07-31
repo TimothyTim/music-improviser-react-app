@@ -1,18 +1,14 @@
 import _ from 'lodash';
-import Scale from './Model/Scale.js';
+import Musie from 'musie';
 import Player from '../Player/Player.js';
-
-const key = 'C';
 
 class Lead {
     constructor(bps) {
-        this.scale = Scale.get('pentatonic', {
-            name: key,
-            octave: 3
-        });
+        this.scale = Musie.get('C5', 'major');
+        console.log(this.scale);
         this.player = new Player();
-        this.currentIndex = 7;
-        this.noteName = this.scale[this.currentIndex];
+        this.currentIndex = 3;
+        this.noteName = this.scale[this.currentIndex].name;
         this.bps = bps;
         this.stopped = false;
         this.pushPull = 200;
@@ -67,9 +63,8 @@ class Lead {
     playNote() {
         this.stopped = false;
         const newNote = this.scale[this.currentIndex];
-        this.noteName = newNote.name + newNote.octave;
-        this.player.triggerNote('on', this.noteName);
-        this.player.triggerNote('off', _.clone(this.noteName), this.noteDuration());
+        this.player.triggerNote('on', newNote.name);
+        this.player.triggerNote('off', _.clone(newNote.name), this.noteDuration());
     }
 
     noteDuration() {

@@ -1,9 +1,9 @@
 import $ from 'jquery';
-import Music from '../../../utils/Music.js';
+import Musie from 'musie';
 
 class Chord {
     constructor(chord, snapShot) {
-        this.name = chord.name;
+        this.chord = chord;
         this.duration = chord.duration;
         this.masterVolume = $('.slider');
         this.startPoint = snapShot;
@@ -12,33 +12,14 @@ class Chord {
 
     getNotes(triggerOn) {
         const masterVol = this.masterVolume.val() / 100;
-        let chordNotes = [];
+        let chordNotes = Musie.get(this.chord.root, this.chord.harmony);
         let notesWithGain = [];
 
-        // convert chord name to a series of notes
-        // Bbmaj -> [note1, note2, note3]
-
-        switch(this.name) {
-            case "C":
-                chordNotes = ["C4", "E4", "G4"];
-                break;
-            case "Am":
-                chordNotes = ["A4", "C4", "E4"];
-                break;
-            case "Dm":
-                chordNotes = ["D4", "F4", "A4"];
-                break;
-            case "G":
-                chordNotes = ["G4", "B4", "D4"];
-                break;
-            default:
-                alert("Chord not found");
-        }
-
-        chordNotes.forEach(function(name) {
+        chordNotes.forEach(function(note) {
             let fullNote = {
-                name: name,
-                number: Music.noteNameToNoteNumber(name),
+                name: note.name,
+                number: note.number,
+                frequency: note.frequency,
                 gain: triggerOn ? masterVol : 0
             };
 

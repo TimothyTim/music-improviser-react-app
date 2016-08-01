@@ -5,7 +5,6 @@ import Player from '../Player/Player.js';
 class Lead {
     constructor(bps) {
         this.scale = Musie.get('C5', 'major');
-        console.log(this.scale);
         this.player = new Player();
         this.currentIndex = 3;
         this.noteName = this.scale[this.currentIndex].name;

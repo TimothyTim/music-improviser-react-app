@@ -1,19 +1,23 @@
 export default {
     "sequence1": [
         {
-            "name": "C",
+            "root": "C3",
+            "harmony": "M",
             "duration": 3
         },
         {
-            "name": "Am",
+            "root": "A3",
+            "harmony": "m",
             "duration": 3
         },
         {
-            "name": "Dm",
+            "root": "D3",
+            "harmony": "m",
             "duration": 3
         },
         {
-            "name": "G",
+            "root": "G3",
+            "harmony": "M",
             "duration": 3
         }
     ],

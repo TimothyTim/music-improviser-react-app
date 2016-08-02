@@ -4,7 +4,7 @@ import Player from '../Player/Player.js';
 
 class Lead {
     constructor(bps) {
-        this.scale = Musie.get('C5', 'major');
+        this.scale = Musie.get('C4', 'major');
         this.player = new Player();
         this.currentIndex = 3;
         this.noteName = this.scale[this.currentIndex].name;
@@ -62,8 +62,15 @@ class Lead {
     playNote() {
         this.stopped = false;
         const newNote = this.scale[this.currentIndex];
-        this.player.triggerNote('on', newNote.name);
-        this.player.triggerNote('off', _.clone(newNote.name), this.noteDuration());
+        this.player.triggerNote('onoff', newNote.name);
+        // this.player.triggerNote('off', _.clone(newNote.name), this.noteDuration());
+    }
+
+    playNoteUntilStop() {
+        this.stopped = false;
+        const newNote = this.scale[this.currentIndex];
+        this.player.triggerNote('onoff', newNote.name);
+        // this.player.triggerNote('off', _.clone(newNote.name), this.noteDuration());
     }
 
     noteDuration() {

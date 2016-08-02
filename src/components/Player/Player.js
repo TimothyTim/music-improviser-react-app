@@ -82,21 +82,22 @@ class Player {
             name: name,
             number: music.noteNameToNoteNumber(name),
             frequency: music.noteNameToFrequency(name),
-            gain: action === 'on' ? 0.4 : 0
+            gain: action === 'on' || 'onoff' ? 0.4 : 0
         };
-        const synth = this.myMonoSynth;
-        synth.stopAll();
 
         setTimeout(() => {
             switch(action) {
+                case 'onoff':
+                    this.polySynth.startStop(note);
+                    break;
                 case 'on':
-                    synth.start(note);
+                    this.polySynth.start(note);
                     break;
                 case 'off':
-                    synth.stop(note);
+                    this.polySynth.stop(note);
                     break;
                 case 'stop':
-                    synth.stopAll();
+                    this.polySynth.stopAll();
                     break;
                 default:
                     alert('Unrecognised player trigger');

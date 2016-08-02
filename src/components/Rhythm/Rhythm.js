@@ -29,8 +29,6 @@ class RhythmMaker {
         const nextBeatIndex = this.currentBeat.beatIndex;
         const nextSubBeatIndex = this.currentBeat.subBeatIndex;
 
-        console.log(beatIndex, nextBeatIndex);
-
         if (!_.isEqual(this.snapShot, this.currentBeat)) {
 
             if (barIndex !== nextBarIndex) {

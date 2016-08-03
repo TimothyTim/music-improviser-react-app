@@ -66,15 +66,8 @@ class Lead {
         this.player.triggerNote('off', newNote.name, this.noteDuration());
     }
 
-    playNoteUntilStop() {
-        this.stopped = false;
-        const newNote = this.scale[this.currentIndex];
-        // this.player.triggerNote('onoff', newNote.name);
-        // this.player.triggerNote('off', _.clone(newNote.name), this.noteDuration());
-    }
-
     noteDuration() {
-        return (Clock().bps*1) * 2 + this.pushPull;
+        return Clock().bps * 2 + this.pushPull;
     }
 
     stop() {

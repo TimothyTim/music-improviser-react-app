@@ -33,7 +33,7 @@ class App extends React.Component {
 
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyDown, false);
-        this.clock = new Clock(this.state.tempo);
+        this.clock = Clock(this.state.tempo);
         inputs.bind();
     }
 

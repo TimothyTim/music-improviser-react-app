@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import Musie from 'musie';
+import Clock from '../Clock/Clock.js';
 import Player from '../Player/Player.js';
 
 class Lead {
-    constructor(bps) {
+    constructor() {
         this.scale = Musie.get('C4', 'major');
         this.player = new Player();
         this.currentIndex = 3;
         this.noteName = this.scale[this.currentIndex].name;
-        this.bps = bps;
         this.stopped = false;
         this.pushPull = 200;
     }
@@ -62,28 +62,24 @@ class Lead {
     playNote() {
         this.stopped = false;
         const newNote = this.scale[this.currentIndex];
-        this.player.triggerNote('onoff', newNote.name);
-        // this.player.triggerNote('off', _.clone(newNote.name), this.noteDuration());
+        this.player.triggerNote('on', newNote.name);
+        this.player.triggerNote('off', newNote.name, this.noteDuration());
     }
 
     playNoteUntilStop() {
         this.stopped = false;
         const newNote = this.scale[this.currentIndex];
-        this.player.triggerNote('onoff', newNote.name);
+        // this.player.triggerNote('onoff', newNote.name);
         // this.player.triggerNote('off', _.clone(newNote.name), this.noteDuration());
     }
 
     noteDuration() {
-        return (this.bps*1000) * 2 + this.pushPull;
+        return (Clock().bps*1) * 2 + this.pushPull;
     }
 
     stop() {
         this.player.triggerNote('stop');
         this.stopped = true;
-    }
-
-    updateTempo(bps) {
-        this.bps = bps;
     }
 }
 

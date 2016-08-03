@@ -88,16 +88,16 @@ class Player {
         setTimeout(() => {
             switch(action) {
                 case 'onoff':
-                    this.polySynth.startStop(note);
+                    this.myPolySynth.startStop(note);
                     break;
                 case 'on':
-                    this.polySynth.start(note);
+                    this.myPolySynth.start(note);
                     break;
                 case 'off':
-                    this.polySynth.stop(note);
+                    this.myPolySynth.stop(note);
                     break;
                 case 'stop':
-                    this.polySynth.stopAll();
+                    this.myPolySynth.stopAll();
                     break;
                 default:
                     alert('Unrecognised player trigger');

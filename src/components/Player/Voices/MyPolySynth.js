@@ -42,7 +42,7 @@ MyPolySynth.prototype.stop = function(note) {
         currTime
     );
     this.oscGain[note.name].gain.linearRampToValueAtTime(
-        note.gain,
+        0,
         currTime + releaseTime
     );
 };

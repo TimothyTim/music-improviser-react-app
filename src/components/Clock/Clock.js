@@ -11,10 +11,12 @@ const rhythmicPosition = {
     subBeatIndex: rhythm.beatSubDivs
 };
 
+let clock = null;
+
 class Clock {
     constructor(tempo) {
         this.isTicking = false;
-        this.beatPerSecond = 60 / tempo;
+        this.bps = 60 / tempo;
         this.rhythm = {
             beatsInBar: 4,
             beatSubDivs: 4
@@ -25,7 +27,7 @@ class Clock {
         this.startTime = 0; // not necessarily needed
         this.frame = null;
         this.context = new AudioContext();
-        this.rhythmMaker = new RhythmMaker(_.cloneDeep(this.rhythmicPosition), this.beatPerSecond);
+        this.rhythmMaker = new RhythmMaker(_.cloneDeep(this.rhythmicPosition));
     }
 
     start() {
@@ -58,8 +60,7 @@ class Clock {
     }
 
     setTempo(newTempo) {
-        this.beatPerSecond = 60 / newTempo;
-        this.rhythmMaker.updateTempo(this.beatPerSecond);
+        this.bps = 60 / newTempo;
     }
 
     isTicking() {
@@ -77,7 +78,7 @@ class Clock {
     }
 
     tick() {
-        this.nextNoteTime += (1 / this.rhythm.beatSubDivs) * this.beatPerSecond;
+        this.nextNoteTime += (1 / this.rhythm.beatSubDivs) * this.bps;
 
         if (++this.rhythmicPosition.subBeatIndex > this.rhythm.beatSubDivs) {
             this.rhythmicPosition.subBeatIndex = 1;
@@ -100,4 +101,10 @@ class Clock {
     }
 }
 
-export default Clock;
+export default function(tempo) {
+    if (!clock) {
+        clock = new Clock(tempo);
+    }
+
+    return clock;
+}

@@ -63,7 +63,6 @@
     "sass-loader": "^3.1.2",
     "serve-static": "^1.10.2",
     "style-loader": "^0.13.0",
-    "tone": "^0.6.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",

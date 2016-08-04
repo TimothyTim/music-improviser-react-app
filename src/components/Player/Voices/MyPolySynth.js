@@ -42,9 +42,13 @@ MyPolySynth.prototype.stop = function(note) {
         currTime
     );
     this.oscGain[note.name].gain.linearRampToValueAtTime(
-        note.gain,
+        0,
         currTime + releaseTime
     );
+
+    delete this.oscGain[note.name];
+
+    console.log(this.oscGain);
 };
 
 MyPolySynth.prototype.stopAll = function() {
@@ -58,6 +62,8 @@ MyPolySynth.prototype.stopAll = function() {
         );
 
         this.osc[note].stop(0);
+
+        delete this.oscGain[note];
     }
 };
 

@@ -4,6 +4,7 @@ import React from 'react';
 import Settings from './Settings/Settings.js';
 import Help from './Help/Help.js';
 import Toolbar from './Toolbar/Toolbar.js';
+import PianoRoll from './PianoRoll/PianoRoll.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -33,8 +34,9 @@ class App extends React.Component {
 
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyDown, false);
-        this.clock = new Clock(this.state.tempo);
+        this.clock = Clock(this.state.tempo);
         inputs.bind();
+        this.pianoRoll = PianoRoll(document.getElementById('piano-roll'));
     }
 
     changeTempo(e) {
@@ -94,8 +96,9 @@ class App extends React.Component {
 
         return (
             <div className="app">
-                <div className="main">
-                    <button className={`main__start ${mainActive}`} onClick={this.togglePlay}>
+                <div id="piano-roll"></div>
+                <div className="controls">
+                    <button className={`controls__start ${mainActive}`} onClick={this.togglePlay}>
                         <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
                     </button>
                 </div>

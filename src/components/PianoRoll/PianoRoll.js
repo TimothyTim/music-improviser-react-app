@@ -1,3 +1,5 @@
+import Clock from '../Clock/Clock.js';
+
 let pianoRoll = null;
 
 class PianoRoll {
@@ -9,12 +11,11 @@ class PianoRoll {
         this.canvasWidth = 0;
         this.canvasHeight = 0;
         this.pixelsPerSecond = 100;
+        this.numberOfNotes = 12;
+        this.firstNoteNumber = 60;
+        this.lastNoteNumber = 72;
 
-        this.circles = [{x:400,y:400,r:50,color:25,vx:6,vy:10},
-                  {x:500,y:300,r:100,color:125,vx:2,vy:-8},
-                  {x:800,y:350,r:25,color:285,vx:20,vy:-20},
-                  {x:800,y:700,r:75,color:325,vx:13,vy:-8},
-                  {x:400,y:500,r:120,color:175,vx:-4,vy:-6}];
+        this.notes = [];
 
         this.context = this.canvas.getContext("2d");
         window.addEventListener("resize", this.resize.bind(this));
@@ -38,26 +39,28 @@ class PianoRoll {
         this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight);
         this.context.strokeRect(0,0,this.canvasWidth,this.canvasHeight);
 
-         for(let i=0; i<this.circles.length; i++){
-             this.context.fillStyle = 'hsl(' + this.circles[i].color + ',100%,50%)';
+         for(let i=0; i<this.notes.length; i++){
+             this.context.fillStyle = 'hsl(' + this.notes[i].color + ',100%,50%)';
              this.context.beginPath();
-             this.context.arc(this.circles[i].x,this.circles[i].y,this.circles[i].r,0,2*Math.PI,false);
+             this.context.rect(this.calculateXPos(this.notes[i].x), this.calculateYPos(this.notes[i].y), this.notes[i].duration/5, this.canvasHeight/this.numberOfNotes);
              this.context.fill();
 
-             if((this.circles[i].x + this.circles[i].vx + this.circles[i].r > 1 + this.canvasWidth) || (this.circles[i].x - this.circles[i].r + this.circles[i].vx < 1)){
-                this.circles[i].vx = - this.circles[i].vx;
-             }
-             if((this.circles[i].y + this.circles[i].vy + this.circles[i].r > 1 + this.canvasHeight) || (this.circles[i].y - this.circles[i].r + this.circles[i].vy < 1)){
-                 this.circles[i].vy = - this.circles[i].vy;
-             }
-             this.circles[i].x +=this.circles[i].vx;
-             this.circles[i].y +=this.circles[i].vy;
+             this.notes[i].x += this.notes[i].vx / Clock().bps;
+             this.notes[i].y += this.notes[i].vy;
          }
     }
 
     addNote(note, duration) {
-        console.log(note, duration);
-        this.circles.push({x:this.canvasWidth/2,y:this.canvasHeight/2,r:note.number,color:Math.round(Math.random()*400),vx:6,vy:10});
+        const noteProportionOfHeight = (note.number-(this.firstNoteNumber-1)) / this.numberOfNotes;
+        this.notes.push({x:0,y:noteProportionOfHeight,duration:duration,color:Math.round(Math.random()*400),vx:1,vy:0});
+    }
+
+    calculateYPos(heightProportion) {
+        return this.canvasHeight - (heightProportion * this.canvasHeight);
+    }
+
+    calculateXPos(x) {
+        return this.canvasWidth - x;
     }
 }
 

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import RhythmMaker from '../Rhythm/Rhythm.js';
+import PianoRoll from '../PianoRoll/PianoRoll.js';
 
 const rhythm = {
     beatsInBar: 4,
@@ -74,6 +75,9 @@ class Clock {
             // Needs to sit after tick so that snapshot will have updated
             this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
         }
+        
+        PianoRoll().draw();
+
         this.frame = requestAnimationFrame(this.schedule.bind(this)); // call for next sub beat
     }
 

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import Musie from 'musie';
 import Clock from '../Clock/Clock.js';
 import Player from '../Player/Player.js';
+import PianoRoll from '../PianoRoll/PianoRoll.js';
 
 class Lead {
     constructor() {
@@ -62,8 +63,10 @@ class Lead {
     playNote() {
         this.stopped = false;
         const newNote = this.scale[this.currentIndex];
+        const duration = this.noteDuration();
         this.player.triggerNote('on', newNote.name);
         this.player.triggerNote('off', newNote.name, this.noteDuration());
+        PianoRoll().addNote(newNote, duration);
     }
 
     noteDuration() {

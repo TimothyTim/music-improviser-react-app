@@ -1,5 +1,7 @@
 # The Music Improviser
 
+<img src="https://s3-eu-west-1.amazonaws.com/musie/mi-pianoroll.png" />
+
 ### Setup
 
 Installing dependencies:
@@ -20,6 +22,7 @@ Navigate your browser to http://localhost:3000 to see the app running.
 
 If you are keen to get involved then setup a pull request against `master`. Any of the following updates would be great:
 
+* Numerical count-in drawn to canvas
 * Support for safari and touch devices
 * Fix glitchy poly-synth during high tempo
 * Lead note durations reflected on piano roll
@@ -32,3 +35,4 @@ If you are keen to get involved then setup a pull request against `master`. Any 
 * Add rhythm/swing options
 * Add reverb options to the synth
 * Allow improvisation to be saved and recalled later (perhaps as midi)
+* Frequency bars visualisation

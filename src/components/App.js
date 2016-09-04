@@ -5,6 +5,8 @@ import Settings from './Settings/Settings.js';
 import Help from './Help/Help.js';
 import Toolbar from './Toolbar/Toolbar.js';
 import PianoRoll from './PianoRoll/PianoRoll.js';
+import Tabs from './Tabs/Tabs.js';
+import Pane from './Pane/Pane.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -89,6 +91,8 @@ class App extends React.Component {
         this.setState({activeTool: tool});
     }
 
+
+
     render() {
         const {isPlaying, tempo, activeTool, tools} = this.state;
         const playClass = isPlaying ? 'pause' : 'play';
@@ -96,8 +100,19 @@ class App extends React.Component {
 
         return (
             <div className="app">
-                <div id="piano-roll"></div>
-                <div className="controls">
+                <div className="app__window">
+                    <Tabs selected={0}>
+                        <Pane label="Tab 1">
+                            {"Tab 1"}
+                            <div id="piano-roll"></div>
+                        </Pane>
+                        <Pane label="Tab 2">
+                            {"Tab 2"}
+                            <div id="sequencer"></div>
+                        </Pane>
+                    </Tabs>
+                </div>
+                <div className="app__controls">
                     <button className={`controls__start ${mainActive}`} onClick={this.togglePlay}>
                         <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
                     </button>

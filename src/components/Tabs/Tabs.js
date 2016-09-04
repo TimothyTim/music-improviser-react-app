@@ -21,12 +21,13 @@ const Tabs = React.createClass({
     },
     _renderTitles: function() {
         function labels(child, index) {
-            var activeClass = (this.state.selected === index
+            const activeClass = (this.state.selected === index
                 ? 'active'
                 : '');
             return (
                 <li key={index}>
-                    <a href="#" className={activeClass} onClick={this.handleClick.bind(this, index)}>
+                    <a href="#" className={`tabs__labels__link ${activeClass}`} onClick={this.handleClick.bind(this, index)}>
+                        <i className={`fa fa-${activeClass ? 'dot-' : ''}circle-o`} aria-hidden="true"></i>
                         {child.props.label}
                     </a>
                 </li>
@@ -39,9 +40,19 @@ const Tabs = React.createClass({
         );
     },
     _renderContent: function() {
+        function tabView(child, index) {
+            var activeClass = (this.state.selected === index
+                ? 'show'
+                : 'hide');
+            return (
+                <div className={`tabs__content__container ${activeClass}`}>
+                    {child}
+                </div>
+            );
+        }
         return (
             <div className="tabs__content">
-                {this.props.children[this.state.selected]}
+                {this.props.children.map(tabView.bind(this))}
             </div>
         );
     },

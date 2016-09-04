@@ -103,17 +103,15 @@ class App extends React.Component {
                 <div className="app__window">
                     <Tabs selected={0}>
                         <Pane label="Tab 1">
-                            {"Tab 1"}
                             <div id="piano-roll"></div>
                         </Pane>
                         <Pane label="Tab 2">
-                            {"Tab 2"}
                             <div id="sequencer"></div>
                         </Pane>
                     </Tabs>
                 </div>
                 <div className="app__controls">
-                    <button className={`controls__start ${mainActive}`} onClick={this.togglePlay}>
+                    <button className={`app__controls__start ${mainActive}`} onClick={this.togglePlay}>
                         <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
                     </button>
                 </div>

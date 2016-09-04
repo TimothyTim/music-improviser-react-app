@@ -8,7 +8,7 @@ const Pane = React.createClass({
     },
     render: function() {
         return (
-            <div>
+            <div className="pane">
                 {this.props.children}
             </div>
         );

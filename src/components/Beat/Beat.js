@@ -23,7 +23,7 @@ class Beat extends React.Component {
     return (
       <div className="beat__row">
         {index}{". "}{instrument}
-        <BeatRow />
+        <BeatRow subBeats={this.state.subBeats} />
       </div>
     );
   }

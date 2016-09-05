@@ -39,7 +39,7 @@ class PianoRoll {
         this.context.strokeRect(0,0,this.canvasWidth,this.canvasHeight);
 
         for(let i=0; i<this.notes.length; i++){
-          this.context.fillStyle = 'hsla(' + this.notes[i].color + ',100%,50%,0.2)';
+          this.context.fillStyle = 'hsla(' + this.notes[i].color + ',100%,50%,0.4)';
           this.context.beginPath();
           this.context.rect(this.calculateXPos(this.notes[i].x), this.calculateYPos(this.notes[i].y), this.notes[i].duration/5, this.canvasHeight/this.numberOfNotes);
           this.context.fill();

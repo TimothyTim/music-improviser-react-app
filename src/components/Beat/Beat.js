@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import BeatRow from '../BeatRow/BeatRow.js';
 
 class Beat extends React.Component {
@@ -15,26 +15,20 @@ class Beat extends React.Component {
     };
 
     this.drawInstrumentRow = this.drawInstrumentRow.bind(this);
-    this.drawSubbeatColumns = this.drawSubbeatColumns.bind(this);
   }
 
 
   drawInstrumentRow(instrument, index) {
     return (
-      <div className="beat__row">
-        {index}{". "}{instrument}
-        <BeatRow subBeats={this.state.subBeats} />
+      <div key={index}>
+        <BeatRow subBeats={this.state.subBeats} instrument={instrument} />
       </div>
     );
   }
 
-  drawSubbeatColumns() {
-
-  }
-
   render() {
     return (
-      <div className="beat">
+      <div id="beat-container" className="beat">
         {this.state.instruments.map(this.drawInstrumentRow)}
       </div>
     );

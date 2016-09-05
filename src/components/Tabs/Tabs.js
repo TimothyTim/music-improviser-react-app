@@ -28,7 +28,7 @@ const Tabs = React.createClass({
                 <li key={index}>
                     <a href="#" className={`tabs__labels__link ${activeClass}`} onClick={this.handleClick.bind(this, index)}>
                         <i className={`fa fa-${activeClass ? 'dot-' : ''}circle-o`} aria-hidden="true"></i>
-                        {child.props.label}
+                        <span className="tabs__labels__link__text">{child.props.label}</span>
                     </a>
                 </li>
             );
@@ -45,7 +45,7 @@ const Tabs = React.createClass({
                 ? 'show'
                 : 'hide');
             return (
-                <div className={`tabs__content__container ${activeClass}`}>
+                <div key={index} className={`tabs__content__container ${activeClass}`}>
                     {child}
                 </div>
             );

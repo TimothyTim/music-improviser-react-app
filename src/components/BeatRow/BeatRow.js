@@ -10,35 +10,38 @@ class BeatRow extends React.Component {
 
   drawRows() {
     const {subBeats} = this.props;
+    let item = [];
+
+    for (let i = 0; i < subBeats; i++) {
+        item.push(this.drawItem(i));
+    }
 
     return (
-      for (let i = 0; i < subBeats.length; i++) {
-        {this.drawItem}
-      }
+        <div className="beat__row__list">
+            {item}
+        </div>
     );
-
   }
 
-  drawItem() {
-
+  drawItem(index) {
     return (
-      <div className="beat-row__item">
-
-      </div>
+        <div key={index} className="beat__row__list__item">{index}</div>
     );
   }
 
   render() {
     return (
-      <div className="beat-row">
-        {this.drawRows()}
+      <div className="beat__row">
+            <div className="beat__row__label">{this.props.instrument}</div>
+            {this.drawRows()}
       </div>
     );
   }
 }
 
 BeatRow.propTypes = {
-  subBeats: PropTypes.number.isRequired
-}
+  subBeats: PropTypes.number.isRequired,
+  instrument: PropTypes.string.isRequired
+};
 
 export default BeatRow;

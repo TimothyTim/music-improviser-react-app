@@ -1,5 +1,6 @@
 @import 'components/app';
 @import 'components/tabs';
+@import 'components/beat';
 
 // Default Page Styling
 
@@ -19,7 +20,8 @@ html, body {
     min-height: 400px;
 }
 
-#piano-roll {
+#piano-roll,
+#beat-container {
     height: 100%;
     display: block;
     width: 100%;

@@ -12,6 +12,10 @@
             background-color: $palette-emerald-subtle;
             padding: 5px;
             margin-right: 5px;
+
+            &__text {
+                padding: 0 5px;
+            }
         }
     }
 
@@ -20,6 +24,7 @@
 
         &__container {
             height: 100%;
+            border: 1px solid $palette-wet-asphalt;
         }
     }
 }

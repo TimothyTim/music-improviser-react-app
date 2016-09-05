@@ -1,0 +1,32 @@
+.beat {
+    height: 100%;
+    display: block;
+    width: 100%;
+
+    &__row {
+
+        &__label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        &__list {
+            display: inline-block;
+            margin-bottom: 5px;
+
+            &__item {
+                display: inline-block;
+                height: 30px;
+                width: 30px;
+                border: 1px solid $palette-midnight-blue;
+                background-color: $palette-background2;
+                margin-right: 5px;
+                cursor: pointer;
+
+                &:hover {
+                    border: 1px solid $palette-pom-green;
+                }
+            }
+        }
+    }
+}

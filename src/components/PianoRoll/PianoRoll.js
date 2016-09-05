@@ -19,9 +19,8 @@ class PianoRoll {
 
         this.context = this.canvas.getContext("2d");
         window.addEventListener("resize", this.resize.bind(this));
-		this.resize();
-
-		this._currentNotes = null;
+        this.resize();
+        this._currentNotes = null;
     }
 
     resize() {
@@ -39,15 +38,15 @@ class PianoRoll {
         this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight);
         this.context.strokeRect(0,0,this.canvasWidth,this.canvasHeight);
 
-         for(let i=0; i<this.notes.length; i++){
-             this.context.fillStyle = 'hsl(' + this.notes[i].color + ',100%,50%)';
-             this.context.beginPath();
-             this.context.rect(this.calculateXPos(this.notes[i].x), this.calculateYPos(this.notes[i].y), this.notes[i].duration/5, this.canvasHeight/this.numberOfNotes);
-             this.context.fill();
+        for(let i=0; i<this.notes.length; i++){
+          this.context.fillStyle = 'hsla(' + this.notes[i].color + ',100%,50%,0.2)';
+          this.context.beginPath();
+          this.context.rect(this.calculateXPos(this.notes[i].x), this.calculateYPos(this.notes[i].y), this.notes[i].duration/5, this.canvasHeight/this.numberOfNotes);
+          this.context.fill();
 
-             this.notes[i].x += this.notes[i].vx / Clock().bps;
-             this.notes[i].y += this.notes[i].vy;
-         }
+          this.notes[i].x += this.notes[i].vx / Clock().bps;
+          this.notes[i].y += this.notes[i].vy;
+        }
     }
 
     addNote(note, duration) {

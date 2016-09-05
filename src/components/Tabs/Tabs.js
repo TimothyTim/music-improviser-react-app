@@ -41,7 +41,7 @@ const Tabs = React.createClass({
     },
     _renderContent: function() {
         function tabView(child, index) {
-            var activeClass = (this.state.selected === index
+            const activeClass = (this.state.selected === index
                 ? 'show'
                 : 'hide');
             return (

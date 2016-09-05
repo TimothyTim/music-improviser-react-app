@@ -7,6 +7,7 @@ import Toolbar from './Toolbar/Toolbar.js';
 import PianoRoll from './PianoRoll/PianoRoll.js';
 import Tabs from './Tabs/Tabs.js';
 import Pane from './Pane/Pane.js';
+import Beat from './Beat/Beat.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -91,8 +92,6 @@ class App extends React.Component {
         this.setState({activeTool: tool});
     }
 
-
-
     render() {
         const {isPlaying, tempo, activeTool, tools} = this.state;
         const playClass = isPlaying ? 'pause' : 'play';
@@ -102,11 +101,11 @@ class App extends React.Component {
             <div className="app">
                 <div className="app__window">
                     <Tabs selected={0}>
-                        <Pane label="Tab 1">
+                        <Pane label="Lead Improv">
                             <div id="piano-roll"></div>
                         </Pane>
-                        <Pane label="Tab 2">
-                            <div id="sequencer"></div>
+                        <Pane label="Beat">
+                            <Beat />
                         </Pane>
                     </Tabs>
                 </div>

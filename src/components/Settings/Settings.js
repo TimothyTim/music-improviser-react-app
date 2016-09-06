@@ -13,13 +13,6 @@ class Settings extends React.Component {
                     <input type="number" min="20" max="200" defaultValue={tempo} className="tempo" onChange={changeTempo} /><br />
                 </div>
                 <div>
-                    <h2>Synth Settings</h2>
-                    <label>Volume: </label>
-                    <input type="range" min="0" max="80" defaultValue="20" className="slider" /><br />
-                    <label>Attack Time (ms): </label>
-                    <input type="number" min="0" max="3000" defaultValue="10" className="attackTime" /><br />
-                    <label>Release Time (ms): </label>
-                    <input type="number" min="0" max="3000" defaultValue="200" className="releaseTime" /><br />
                     <h3>Midi Input Device: </h3>
                     <table id="midi_source">
                         <tbody>

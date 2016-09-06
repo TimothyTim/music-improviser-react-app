@@ -13,7 +13,6 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
-        this.clock = null;
         this.togglePlay = this.togglePlay.bind(this);
         this.toggleTool = this.toggleTool.bind(this);
         this.changeTempo = this.changeTempo.bind(this);
@@ -31,15 +30,17 @@ class App extends React.Component {
                     name: 'help',
                     icon: 'question-circle'
                 }
-            ]
+            ],
+            clock: {
+                ticking: false
+            }
         };
     }
 
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyDown, false);
-        this.clock = Clock(this.state.tempo);
         inputs.bind();
-        this.pianoRoll = PianoRoll(document.getElementById('piano-roll'));
+        this.pianoRoll = PianoRoll(this.refs.pianoroll);
     }
 
     changeTempo(e) {
@@ -53,7 +54,7 @@ class App extends React.Component {
             value = upperLimit;
         }
 
-        this.clock.setTempo(value);
+        // this.clock.setTempo(value);
     }
 
     handleKeyDown(e) {
@@ -75,9 +76,11 @@ class App extends React.Component {
 
     togglePlay() {
         if (this.state.isPlaying) {
-            this.clock.stop();
+            this.setState({clock: {ticking: false}});
+            this.refs.clock.stop();
         } else {
-            this.clock.start();
+            this.setState({clock: {ticking: true}});
+            this.refs.clock.start();
         }
 
         this.setState({isPlaying: !this.state.isPlaying});
@@ -99,10 +102,11 @@ class App extends React.Component {
 
         return (
             <div className="app">
+                <Clock tempo={this.state.tempo} start={this.state.clock.ticking} ref={'clock'} />
                 <div className="app__window">
                     <Tabs selected={0}>
                         <Pane label="Lead Improv">
-                            <div id="piano-roll"></div>
+                            <div ref={"pianoroll"} id="piano-roll"></div>
                         </Pane>
                         <Pane label="Beat">
                             <Beat />

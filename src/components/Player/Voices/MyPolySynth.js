@@ -1,13 +1,11 @@
-import $ from 'jquery';
-
 function MyPolySynth(context) {
     this.context = context;
     this.osc = {};
     this.oscGain = {};
     this.oscillators = [];
-    this.attackTime = $('.attackTime');
-    this.releaseTime = $('.releaseTime');
-    this.masterVolume = $('.slider');
+    this.attackTime = 10;
+    this.releaseTime = 200;
+    this.masterVolume = 20;
 }
 
 MyPolySynth.prototype.start = function(note) {

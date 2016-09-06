@@ -1,6 +1,7 @@
+import React, {PropTypes} from 'react';
 import _ from 'lodash';
 import RhythmMaker from '../Rhythm/Rhythm.js';
-import PianoRoll from '../PianoRoll/PianoRoll.js';
+// import PianoRoll from '../PianoRoll/PianoRoll.js';
 
 const rhythm = {
     beatsInBar: 4,
@@ -12,12 +13,11 @@ const rhythmicPosition = {
     subBeatIndex: rhythm.beatSubDivs
 };
 
-let clock = null;
-
-class Clock {
-    constructor(tempo) {
+class Clock extends React.Component {
+    constructor(props) {
+        super(props)
         this.isTicking = false;
-        this.bps = 60 / tempo;
+        this.bps = 60 / this.props.tempo;
         this.rhythm = {
             beatsInBar: 4,
             beatSubDivs: 4
@@ -26,9 +26,20 @@ class Clock {
         this.rhythmicPosition = _.cloneDeep(rhythmicPosition);
         this.nextNoteTime = 0;
         this.startTime = 0; // not necessarily needed
-        this.frame = null;
-        this.context = new AudioContext();
+        this.context = null;
         this.rhythmMaker = new RhythmMaker(_.cloneDeep(this.rhythmicPosition));
+        this.state = {
+            frame: null,
+            rhythmicPos: null
+        };
+    }
+
+    componentDidUpdate() {
+        console.log(this.state);
+    }
+
+    componentDidMount() {
+        this.context = new AudioContext();
     }
 
     start() {
@@ -43,12 +54,12 @@ class Clock {
     }
 
     pause() {
-        cancelAnimationFrame(this.frame);
+        cancelAnimationFrame(this.state.frame);
         this.isTicking = false;
     }
 
     stop() {
-        cancelAnimationFrame(this.frame);
+        cancelAnimationFrame(this.state.frame);
         this.rhythmMaker.stopChords();
         this.reset();
     }
@@ -72,13 +83,19 @@ class Clock {
         while (this.nextNoteTime <= (this.context.currentTime - this.startTime)) {
             this.tick();
 
-            // Needs to sit after tick so that snapshot will have updated
-            this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
-        }
-        
-        PianoRoll().draw();
+            this.setState({
+                rhythmicPos: this.rhythmicPosition
+            });
 
-        this.frame = requestAnimationFrame(this.schedule.bind(this)); // call for next sub beat
+            // Needs to sit after tick so that snapshot will have updated
+            // this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
+        }
+
+        // PianoRoll().draw();
+
+        this.setState({
+            frame: requestAnimationFrame(this.schedule.bind(this))
+        });
     }
 
     tick() {
@@ -103,12 +120,16 @@ class Clock {
     isFromBeginning() {
         return this.nextNoteTime === 0;
     }
-}
 
-export default function(tempo) {
-    if (!clock) {
-        clock = new Clock(tempo);
+    render() {
+        return (
+            <div className="clock"></div>
+        );
     }
-
-    return clock;
 }
+
+Clock.propTypes = {
+    tempo: PropTypes.number.isRequired
+};
+
+export default Clock;

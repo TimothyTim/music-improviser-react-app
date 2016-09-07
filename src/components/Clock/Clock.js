@@ -43,7 +43,7 @@ class Clock extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log(this.props);
+        console.log(this.props.clock.nextTick);
     }
 
     componentDidMount() {
@@ -122,7 +122,7 @@ class Clock extends React.Component {
         while (this.nextNoteTime <= (this.context.currentTime - this.startTime)) {
             this.tick();
 
-            this.props.actions.nextTick({nextTick: this.rhythmicPosition});
+            this.props.actions.nextTick({nextTick: Object.assign({}, this.rhythmicPosition)});
 
             // Needs to sit after tick so that snapshot will have updated
             // this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
@@ -166,7 +166,7 @@ class Clock extends React.Component {
         return (
             <div className="clock">
               <div className="clock__controls">
-                  <button className={`app__controls__start ${mainActive}`} onClick={this.togglePlay}>
+                  <button className={`clock__controls__start ${mainActive}`} onClick={this.togglePlay}>
                       <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
                   </button>
               </div>

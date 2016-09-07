@@ -31,7 +31,7 @@ MyPolySynth.prototype.start = function(note) {
 };
 
 MyPolySynth.prototype.stop = function(note) {
-    const releaseTime = this.releaseTime.val() / 1000;
+    const releaseTime = this.releaseTime / 1000;
     const currTime = this.context.currentTime;
 
     //Decay
@@ -50,7 +50,7 @@ MyPolySynth.prototype.stop = function(note) {
 };
 
 MyPolySynth.prototype.stopAll = function() {
-    const releaseTime = this.releaseTime.val() / 1000;
+    const releaseTime = this.releaseTime / 1000;
     const currTime = this.context.currentTime;
 
     for (let note in this.oscGain) {

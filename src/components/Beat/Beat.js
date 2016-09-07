@@ -1,5 +1,5 @@
 import React from 'react';
-import BeatRow from '../BeatRow/BeatRow.js';
+import {connect} from 'react-redux';
 
 class Beat extends React.Component {
   constructor(props) {
@@ -15,13 +15,46 @@ class Beat extends React.Component {
     };
 
     this.drawInstrumentRow = this.drawInstrumentRow.bind(this);
+    this.drawRows = this.drawRows.bind(this);
+    this.drawItem = this.drawItem.bind(this);
+    this.getSubBeatPositionFromIndex = this.getSubBeatPositionFromIndex.bind(this);
   }
 
+  drawRows() {
+    const {subBeats} = this.state;
+    let item = [];
+
+    for (let i = 0; i < subBeats; i++) {
+        item.push(this.drawItem(i));
+    }
+
+    return (
+        <div className="beat__row__list">
+            {item}
+        </div>
+    );
+  }
+
+  getSubBeatPositionFromIndex(index) {
+
+
+  }
+
+  drawItem(index) {
+    const beatPos = this.getSubBeatPositionFromIndex(index);
+
+    return (
+        <div key={index} className={`beat__row__list__item ${index}`}>{index}</div>
+    );
+  }
 
   drawInstrumentRow(instrument, index) {
     return (
       <div key={index}>
-        <BeatRow subBeats={this.state.subBeats} instrument={instrument} />
+        <div className="beat__row">
+              <div className="beat__row__label">{this.props.instrument}</div>
+              {this.drawRows()}
+        </div>
       </div>
     );
   }
@@ -35,4 +68,13 @@ class Beat extends React.Component {
   }
 }
 
-export default Beat;
+function mapStateToProps(state) {
+    return {
+        clock: state.clock
+    };
+}
+
+
+export default connect(
+    mapStateToProps
+)(Beat);

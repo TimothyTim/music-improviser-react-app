@@ -1,6 +1,10 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
 import RhythmMaker from '../Rhythm/Rhythm.js';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as clockActions from '../Actions/clockActions';
+
 // import PianoRoll from '../PianoRoll/PianoRoll.js';
 
 const rhythm = {
@@ -30,16 +34,50 @@ class Clock extends React.Component {
         this.rhythmMaker = new RhythmMaker(_.cloneDeep(this.rhythmicPosition));
         this.state = {
             frame: null,
-            rhythmicPos: null
+            rhythmicPos: null,
+            ticking: false
         };
+
+        this.togglePlay = this.togglePlay.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     componentDidUpdate() {
-        console.log(this.state);
+        console.log(this.props);
     }
 
     componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyDown, false);
         this.context = new AudioContext();
+    }
+
+    handleKeyDown(e) {
+        const keyCode = e.keyCode || e.which;
+        const isInsideInput = e.target.tagName.toLowerCase().match(/input|textarea/);
+        if (isInsideInput) {
+            return;
+        }
+
+        if (keyCode === 32) {
+            e.preventDefault();
+            this.togglePlay();
+        }
+        if (keyCode === 27) {
+            e.preventDefault();
+            this.toggleTool(null);
+        }
+    }
+
+    togglePlay() {
+        if (this.state.isPlaying) {
+            this.setState({ticking: false});
+            this.stop();
+        } else {
+            this.setState({ticking: true});
+            this.start();
+        }
+
+        this.setState({isPlaying: !this.state.isPlaying});
     }
 
     start() {
@@ -80,12 +118,11 @@ class Clock extends React.Component {
     }
 
     schedule() {
+        console.log(this.nextNoteTime, this.context.currentTime, this.startTime);
         while (this.nextNoteTime <= (this.context.currentTime - this.startTime)) {
             this.tick();
 
-            this.setState({
-                rhythmicPos: this.rhythmicPosition
-            });
+            this.props.actions.nextTick({nextTick: this.rhythmicPosition});
 
             // Needs to sit after tick so that snapshot will have updated
             // this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
@@ -122,8 +159,18 @@ class Clock extends React.Component {
     }
 
     render() {
+        const {ticking} = this.state
+        const playClass = ticking ? 'pause' : 'play';
+        const mainActive = ticking ? 'active' : '';
+
         return (
-            <div className="clock"></div>
+            <div className="clock">
+              <div className="clock__controls">
+                  <button className={`app__controls__start ${mainActive}`} onClick={this.togglePlay}>
+                      <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
+                  </button>
+              </div>
+            </div>
         );
     }
 }
@@ -132,4 +179,23 @@ Clock.propTypes = {
     tempo: PropTypes.number.isRequired
 };
 
-export default Clock;
+
+function mapStateToProps(state) {
+    return {
+        clock: state.clock
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    // defines what actions are avaiable in the Component
+
+    return {
+        actions: bindActionCreators(clockActions, dispatch)
+    };
+}
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Clock);

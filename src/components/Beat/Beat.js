@@ -1,68 +1,98 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 
 class Beat extends React.Component {
   constructor(props) {
     super(props);
 
+    this.drawRow = this.drawRow.bind(this);
+    this.drawItem = this.drawItem.bind(this);
+    this.getItemState = this.getItemState.bind(this);
+    this.initItemState = this.initItemState.bind(this);
+
+    const instruments = [
+      'hihat',
+      'snare',
+      'kick'
+  ];
+
+    const subBeats = 16;
+
     this.state = {
-      instruments: [
-        'hihat',
-        'snare',
-        'kick'
-      ],
-      subBeats: 16
+      instruments: instruments,
+      subBeats: subBeats
     };
 
-    this.drawInstrumentRow = this.drawInstrumentRow.bind(this);
-    this.drawRows = this.drawRows.bind(this);
-    this.drawItem = this.drawItem.bind(this);
-    this.getSubBeatPositionFromIndex = this.getSubBeatPositionFromIndex.bind(this);
+    this.items = this.initItemState(instruments, subBeats);
   }
 
-  drawRows() {
-    const {subBeats} = this.state;
-    let item = [];
+  initItemState(instruments, subBeats) {
+      let itemsState = [];
+      let instrumentsArray = [];
 
-    for (let i = 0; i < subBeats; i++) {
-        item.push(this.drawItem(i));
-    }
+      for (let x = 0; x < subBeats; x++) {
+          itemsState.push('inactive');
+      }
 
-    return (
-        <div className="beat__row__list">
-            {item}
-        </div>
-    );
+      for (let i = 0; i < instruments.length; i++) {
+          instrumentsArray.push(itemsState);
+      }
+
+      return instrumentsArray;
   }
 
-  getSubBeatPositionFromIndex(index) {
-
-
+  getItemState(rowIndex, index) {
+      return this.items[rowIndex][index];
   }
 
-  drawItem(index) {
-    const beatPos = this.getSubBeatPositionFromIndex(index);
+  setItemState(rowIndex, index) {
+      let items = _.clone(this.items);
+      const itemState = items[rowIndex][index];
 
-    return (
-        <div key={index} className={`beat__row__list__item ${index}`}>{index}</div>
-    );
+      if (itemState === 'active') {
+          items[rowIndex][index] = 'inactive';
+      } else {
+          items.forEach((itemArray, arrayIndex) => {
+              if (arrayIndex === rowIndex) {
+                  itemArray[index] = 'active'
+              }
+          })
+      }
+
+      this.setState({items: items});
   }
 
-  drawInstrumentRow(instrument, index) {
-    return (
-      <div key={index}>
-        <div className="beat__row">
-              <div className="beat__row__label">{this.props.instrument}</div>
-              {this.drawRows()}
-        </div>
-      </div>
-    );
+  drawRow(row, rowIndex) {
+      return (
+          <div key={rowIndex} className="beat__row">
+              <div className="beat__row__label">{this.state.instruments[rowIndex]}</div>
+              <div className="beat__row__list">
+                  {row.map((itemState, index) => {
+                      return this.drawItem(itemState, index, rowIndex);
+                  })}
+              </div>
+          </div>
+      );
+  }
+
+  drawItem(itemState, index, rowIndex) {
+      const id = rowIndex + "-" + index;
+
+      return (
+          <div key={id}
+              className={`beat__row__list__item no-select ${id} is-${itemState}`}
+              onClick={this.setItemState.bind(this, rowIndex, index)}
+          >
+              {index}
+          </div>
+      );
   }
 
   render() {
     return (
       <div id="beat-container" className="beat">
-        {this.state.instruments.map(this.drawInstrumentRow)}
+        {this.items.map(this.drawRow)}
       </div>
     );
   }

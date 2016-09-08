@@ -1,7 +1,7 @@
 import {createStore, applyMiddleware, compose} from 'redux';
 import rootReducer from '../Reducers';
 import thunk from 'redux-thunk';
-import Config from '../../constants/Config.js';
+import Config from '../../constants/config.js';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 
 const DEV = Config.ENV === 'development';

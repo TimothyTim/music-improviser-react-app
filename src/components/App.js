@@ -14,7 +14,7 @@ class App extends React.Component {
         super(props);
 
         this.toggleTool = this.toggleTool.bind(this);
-        this.changeTempo = this.changeTempo.bind(this);        
+        this.changeTempo = this.changeTempo.bind(this);
         this.state = {
             isPlaying: false,
             tempo: 60,
@@ -28,8 +28,7 @@ class App extends React.Component {
                     name: 'help',
                     icon: 'question-circle'
                 }
-            ],
-
+            ]
         };
     }
 

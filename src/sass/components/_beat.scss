@@ -23,12 +23,16 @@
                 margin-right: 5px;
                 cursor: pointer;
 
+                &.is-current {
+                    background-color: $palette-silver;
+                }
+
                 &.is-active {
                     background-color: $palette-sun-flower;
                 }
 
-                &.is-current {
-
+                &.is-active.is-current {
+                    background-color: $palette-orange;
                 }
 
                 &:hover {

@@ -20,7 +20,6 @@ const rhythmicPosition = {
 class Clock extends React.Component {
     constructor(props) {
         super(props)
-        this.isTicking = false;
         this.bps = 60 / this.props.tempo;
         this.rhythm = {
             beatsInBar: 4,
@@ -31,7 +30,6 @@ class Clock extends React.Component {
         this.nextNoteTime = 0;
         this.startTime = 0; // not necessarily needed
         this.context = null;
-        this.rhythmMaker = new RhythmMaker(_.cloneDeep(this.rhythmicPosition));
         this.state = {
             frame: null,
             rhythmicPos: null,
@@ -40,10 +38,6 @@ class Clock extends React.Component {
 
         this.togglePlay = this.togglePlay.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
-    }
-
-    componentDidUpdate() {
-        console.log(this.props.clock.nextTick);
     }
 
     componentDidMount() {
@@ -77,55 +71,43 @@ class Clock extends React.Component {
             this.start();
         }
 
-        this.setState({isPlaying: !this.state.isPlaying});
+        this.setState({
+            isPlaying: !this.state.isPlaying
+        });
     }
 
     start() {
-        if (!this.isTicking) {
+        if (!this.props.clock.isTicking) {
             if (this.isFromBeginning()) {
                 this.startTime = this.context.currentTime;
             }
 
             this.schedule();
-            this.isTicking = true;
+            this.props.actions.isTicking({isTicking: true});
         }
-    }
-
-    pause() {
-        cancelAnimationFrame(this.state.frame);
-        this.isTicking = false;
     }
 
     stop() {
         cancelAnimationFrame(this.state.frame);
-        this.rhythmMaker.stopChords();
+        this.props.actions.isTicking({isTicking: false});
         this.reset();
     }
 
     reset() {
-        this.isTicking = false;
         this.nextNoteTime = 0;
         this.rhythmicPosition = _.cloneDeep(rhythmicPosition);
-        this.rhythmMaker.reset(_.cloneDeep(this.rhythmicPosition));
+        this.props.actions.nextTick({nextTick: Object.assign({}, rhythmicPosition)});
+        // this.refs.rhythmMaker.reset(_.cloneDeep(rhythmicPosition));
     }
 
     setTempo(newTempo) {
         this.bps = 60 / newTempo;
     }
 
-    isTicking() {
-        return this.isTicking;
-    }
-
     schedule() {
-        console.log(this.nextNoteTime, this.context.currentTime, this.startTime);
         while (this.nextNoteTime <= (this.context.currentTime - this.startTime)) {
             this.tick();
-
             this.props.actions.nextTick({nextTick: Object.assign({}, this.rhythmicPosition)});
-
-            // Needs to sit after tick so that snapshot will have updated
-            // this.rhythmMaker.next(_.cloneDeep(this.rhythmicPosition));
         }
 
         // PianoRoll().draw();
@@ -160,16 +142,21 @@ class Clock extends React.Component {
 
     render() {
         const {ticking} = this.state
-        const playClass = ticking ? 'pause' : 'play';
-        const mainActive = ticking ? 'active' : '';
+        const playClass = ticking
+            ? 'pause'
+            : 'play';
+        const mainActive = ticking
+            ? 'active'
+            : '';
 
         return (
             <div className="clock">
-              <div className="clock__controls">
-                  <button className={`clock__controls__start ${mainActive}`} onClick={this.togglePlay}>
-                      <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
-                  </button>
-              </div>
+                <RhythmMaker />
+                <div className="clock__controls">
+                    <button className={`clock__controls__start ${mainActive}`} onClick={this.togglePlay}>
+                        <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
         );
     }
@@ -179,11 +166,8 @@ Clock.propTypes = {
     tempo: PropTypes.number.isRequired
 };
 
-
 function mapStateToProps(state) {
-    return {
-        clock: state.clock
-    };
+    return {clock: state.clock};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -194,8 +178,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Clock);
+export default connect(mapStateToProps, mapDispatchToProps)(Clock);

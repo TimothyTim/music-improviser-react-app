@@ -9,10 +9,10 @@ function MyPolySynth(context) {
 }
 
 MyPolySynth.prototype.start = function(note) {
-    const masterVolume = this.masterVolume.val() / 100;
+    const masterVolume = this.masterVolume / 100;
     const noteGain = note.gain * masterVolume;
     const currTime = this.context.currentTime;
-    const attackTime = this.attackTime.val() / 1000;
+    const attackTime = this.attackTime / 1000;
 
     this.noteGainOnAttack = noteGain; // for linear rampdown
 

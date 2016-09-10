@@ -1,17 +1,16 @@
-import $ from 'jquery';
 import Musie from 'musie';
 
 class Chord {
     constructor(chord, snapShot) {
         this.chord = chord;
         this.duration = chord.duration;
-        this.masterVolume = $('.slider');
+        this.masterVolume = 20;
         this.startPoint = snapShot;
         this.endPoint = this.getEndPoint();
     }
 
     getNotes(triggerOn) {
-        const masterVol = this.masterVolume.val() / 100;
+        const masterVol = this.masterVolume / 100;
         let chordNotes = Musie.get(this.chord.root, this.chord.harmony);
         let notesWithGain = [];
 

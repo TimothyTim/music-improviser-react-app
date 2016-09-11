@@ -20,11 +20,11 @@ Navigate your browser to http://localhost:3000 to see the app running.
 
 ### Contributing
 
-If you are keen to get involved then setup a pull request against `master`. Any of the following updates would be great:
+If you are keen to get involved then setup a pull request against `master`. The following updates are ideas I have in mind:
 
-* Numerical count-in drawn to canvas
+* Count-in drawn to canvas
 * Support for safari and touch devices
-* Fix glitchy poly-synth during high tempo
+* Fix glitchy poly-synth note off
 * Lead note durations reflected on piano roll
 * Add a clickable piano keyboard
 * Add on/off switch to improvisation (allowing user to play instead)

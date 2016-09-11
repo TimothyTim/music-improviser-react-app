@@ -33,6 +33,7 @@ class Clock extends React.Component {
             rhythmicPos: null,
             ticking: false
         };
+        this.frameCount = 0;
 
         this.togglePlay = this.togglePlay.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -94,7 +95,7 @@ class Clock extends React.Component {
     stop() {
         cancelAnimationFrame(this.state.frame);
         this.reset();
-        this.props.actions.isTicking({isTicking: false});
+        this.props.actions.isTicking({ isTicking: false });
     }
 
     reset() {
@@ -104,17 +105,13 @@ class Clock extends React.Component {
         // this.refs.rhythmMaker.reset(_.cloneDeep(rhythmicPosition));
     }
 
-    // setTempo(newTempo) {
-    //     this.bps = 60 / newTempo;
-    // }
-
     schedule() {
         while (this.nextNoteTime <= (this.context.currentTime - this.startTime)) {
             this.tick();
             this.props.actions.nextTick({nextTick: Object.assign({}, this.rhythmicPosition)});
         }
 
-        this.props.actions.nextFrame({nextFrame: 'frame'});
+        this.props.actions.nextFrame({nextFrame: ++this.frameCount});
 
         this.setState({
             frame: requestAnimationFrame(this.schedule.bind(this))

@@ -44,9 +44,7 @@ MyPolySynth.prototype.stop = function(note) {
         currTime + releaseTime
     );
 
-    delete this.oscGain[note.name];
-
-    console.log(this.oscGain);
+    // delete this.oscGain[note.name];
 };
 
 MyPolySynth.prototype.stopAll = function() {

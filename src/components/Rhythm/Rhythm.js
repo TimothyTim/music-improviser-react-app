@@ -16,6 +16,7 @@ class RhythmMaker extends React.Component {
         this.setupSequence();
         this.snapShot = null;
         this.player = null;
+        this.sameBeat = null;
 
         this.next = this.next.bind(this);
     }
@@ -26,17 +27,19 @@ class RhythmMaker extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (_.isEqual(prevProps.clock.nextTick, this.props.clock.nextTick)) {
+        this.sameBeat = _.isEqual(prevProps.clock.nextTick, this.props.clock.nextTick);
+
+        if (this.sameBeat) {
             return ;
         }
 
         if (!this.props.clock.isTicking) {
             this.props.actions.isCountIn({isCountIn: true});
             this.stopChords();
-            this.next();
+            return ;
         }
 
-        console.log(this.props.clock.nextTick);
+        this.next();
     }
 
     next() {
@@ -73,7 +76,6 @@ class RhythmMaker extends React.Component {
     }
 
     nextBar() {
-        console.log("PLAYING CHORD");
         // iterate through chord sequence
         if (this.props.clock.isTicking) {
             this.playNextChord();
@@ -114,7 +116,8 @@ class RhythmMaker extends React.Component {
     }
 
     stopCurrentChord() {
-        this.player.trigger('off', this.currentChord.getNotes(false), 'myPolySynth');
+        // this.player.trigger('off', this.currentChord.getNotes(false), 'myPolySynth');
+        this.player.trigger('stop');
         this.currentChord = null;
     }
 
@@ -127,7 +130,6 @@ class RhythmMaker extends React.Component {
 
     setupSequence() {
         this.sequenceEntries = chordSequence.sequence1.entries();
-        // this.sequenceEntries = chordSequence.sequence1;
     }
 
     reset(rhythmicPosition) {

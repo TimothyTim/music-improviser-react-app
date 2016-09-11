@@ -15,7 +15,8 @@ class Lead extends React.Component {
         this.player = null;
         this.noteName = this.scale[this.currentIndex].name;
         this.stopped = false;
-        this.pushPull = 200;
+        this.noteFixedDuration = 200;
+        this.pushPull = null;
         this.notesPlayed = [];
     }
 
@@ -35,8 +36,6 @@ class Lead extends React.Component {
         if (!this.props.clock.isTicking) {
             this.stop();
         }
-
-        // this.props.actions.leadNote({leadNote: {}});
     }
 
     next() {
@@ -105,7 +104,7 @@ class Lead extends React.Component {
     }
 
     noteDuration() {
-        return (this.props.clock.tempo / 60) * 2 + this.pushPull;
+        return (this.props.clock.tempo / 60) * 2 + this.noteFixedDuration;
     }
 
     stop() {

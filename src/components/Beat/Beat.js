@@ -8,15 +8,10 @@ class Beat extends React.Component {
     constructor(props) {
         super(props);
 
-        this.drawRow = this.drawRow.bind(this);
-        this.drawItem = this.drawItem.bind(this);
-        this.getItemState = this.getItemState.bind(this);
-        this.initItemState = this.initItemState.bind(this);
-        this.playInstrument = this.playInstrument.bind(this);
         this.player = null;
+        this.sameBeat = false;
 
         const instruments = ['hihatOpen', 'hihat', 'snap', 'kick'];
-
         const subBeats = 16;
 
         this.state = {
@@ -26,6 +21,11 @@ class Beat extends React.Component {
 
         this.items = this.initItemState(instruments, subBeats);
         this.nextBar = this.nextBar.bind(this);
+        this.drawRow = this.drawRow.bind(this);
+        this.drawItem = this.drawItem.bind(this);
+        this.getItemState = this.getItemState.bind(this);
+        this.initItemState = this.initItemState.bind(this);
+        this.playInstrument = this.playInstrument.bind(this);
     }
 
     componentDidMount() {
@@ -47,8 +47,11 @@ class Beat extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (_.isEqual(prevProps.clock.nextTick, this.props.clock.nextTick)) {
+            this.sameBeat = true;
             return ;
         }
+
+        this.sameBeat = false;
 
         if (prevProps.clock.nextTick.beatIndex !== this.props.clock.nextTick.beatIndex) {
             this.nextBar();
@@ -63,7 +66,6 @@ class Beat extends React.Component {
 
     playInstrument(instrumentIndex) {
         const instrument = this.state.instruments[instrumentIndex];
-console.log("playing ", instrument);
         this.player.play(this[instrument]);
     }
 
@@ -120,7 +122,7 @@ console.log("playing ", instrument);
             isCurrent = Music.convertBeatPosToLinearVal(nextTick) === index ? 'is-current' : '';
         }
 
-        if (isCurrent && itemState === 'active') {
+        if (isCurrent && itemState === 'active' && !this.sameBeat) {
             this.playInstrument(rowIndex);
         }
 
@@ -135,6 +137,7 @@ console.log("playing ", instrument);
     render() {
         return (
             <div id="beat-container" className="beat">
+                <h2>Beat Maker</h2>
                 {this.items.map(this.drawRow)}
             </div>
         );

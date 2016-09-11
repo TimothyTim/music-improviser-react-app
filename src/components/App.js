@@ -14,7 +14,6 @@ class App extends React.Component {
         super(props);
 
         this.toggleTool = this.toggleTool.bind(this);
-        this.changeTempo = this.changeTempo.bind(this);
         this.state = {
             isPlaying: false,
             tempo: 60,
@@ -36,20 +35,6 @@ class App extends React.Component {
         inputs.bind();
     }
 
-    changeTempo(e) {
-        const upperLimit = 200;
-        const lowerLimit = 40;
-        let {value} = e.currentTarget;
-
-        if (value < lowerLimit) {
-            value = lowerLimit;
-        } else if (value > upperLimit) {
-            value = upperLimit;
-        }
-
-        // this.clock.setTempo(value);
-    }
-
     toggleTool(tool) {
         if (this.state.activeTool === tool) {
             this.setState({activeTool: null});
@@ -60,7 +45,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {tempo, activeTool, tools} = this.state;
+        const {activeTool, tools} = this.state;
 
         return (
             <div className="app">
@@ -76,7 +61,7 @@ class App extends React.Component {
                 </div>
                 <Clock tempo={this.state.tempo} />
                 <Toolbar tools={tools} activeTool={activeTool} toggleTool={this.toggleTool} />
-                <Settings isOpen={activeTool === 'settings'} changeTempo={this.changeTempo} tempo={tempo} />
+                <Settings isOpen={activeTool === 'settings'} />
                 <Help isOpen={activeTool === 'help'} />
             </div>
         );

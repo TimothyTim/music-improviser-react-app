@@ -1,10 +1,15 @@
-import Clock from '../Clock/Clock.js';
+import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import _ from 'lodash';
 
-let pianoRoll = null;
+class PianoRoll extends React.Component {
+    constructor(props) {
+        super(props);
+        this.container = null;
+    }
 
-class PianoRoll {
-    constructor(container) {
-        this.container = container;
+    componentDidMount() {
+        this.container = this.refs.pianoRoll;
         this.canvas = document.createElement("canvas");
         this.canvas.id = "canvas";
         this.container.appendChild(this.canvas);
@@ -14,13 +19,21 @@ class PianoRoll {
         this.numberOfNotes = 12;
         this.firstNoteNumber = 60;
         this.lastNoteNumber = 72;
-
         this.notes = [];
 
         this.context = this.canvas.getContext("2d");
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
         this._currentNotes = null;
+    }
+
+    componentDidUpdate(prevProps) {
+        const leadNoteList = _.get(prevProps, 'lead.leadNoteList', []);
+        if (leadNoteList.length !== this.props.lead.leadNoteList.length) {
+            this.addNote();
+        }
+
+        this.draw();
     }
 
     resize() {
@@ -44,13 +57,15 @@ class PianoRoll {
           this.context.rect(this.calculateXPos(this.notes[i].x), this.calculateYPos(this.notes[i].y), this.notes[i].duration/5, this.canvasHeight/this.numberOfNotes);
           this.context.fill();
 
-          this.notes[i].x += this.notes[i].vx / Clock().bps;
+          this.notes[i].x += this.notes[i].vx / (this.props.clock.tempo / 60);
           this.notes[i].y += this.notes[i].vy;
         }
     }
 
-    addNote(note, duration) {
-        const noteProportionOfHeight = (note.number-(this.firstNoteNumber-1)) / this.numberOfNotes;
+    addNote() {
+        const {newNote, duration} = this.props.lead.leadNote;
+        console.log(newNote, duration);
+        const noteProportionOfHeight = (newNote.number-(this.firstNoteNumber-1)) / this.numberOfNotes;
         this.notes.push({x:0,y:noteProportionOfHeight,duration:duration,color:Math.round(Math.random()*400),vx:1,vy:0});
     }
 
@@ -61,12 +76,27 @@ class PianoRoll {
     calculateXPos(x) {
         return this.canvasWidth - x;
     }
-}
 
-export default function(container) {
-    if (!pianoRoll) {
-        pianoRoll = new PianoRoll(container);
+    render() {
+        return (
+            <div className="piano-roll-container" ref="pianoRoll">
+            </div>
+        );
     }
-
-    return pianoRoll;
 }
+
+PianoRoll.propTypes = {
+    clock: PropTypes.object.isRequired,
+    rhythm: PropTypes.object.isRequired,
+    lead: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state) {
+    return {
+        clock: state.clock,
+        rhythm: state.rhythm,
+        lead: state.lead
+    };
+}
+
+export default connect(mapStateToProps)(PianoRoll);

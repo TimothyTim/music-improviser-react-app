@@ -34,7 +34,6 @@ class App extends React.Component {
 
     componentDidMount() {
         inputs.bind();
-        this.pianoRoll = PianoRoll(this.refs.pianoroll);
     }
 
     changeTempo(e) {
@@ -68,7 +67,7 @@ class App extends React.Component {
                 <div className="app__window">
                     <Tabs selected={0}>
                         <Pane label="Lead Improv">
-                            <div ref={"pianoroll"} id="piano-roll"></div>
+                            <PianoRoll />
                         </Pane>
                         <Pane label="Beat">
                             <Beat />

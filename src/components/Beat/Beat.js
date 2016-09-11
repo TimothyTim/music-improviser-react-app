@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import Music from '../../utils/Music.js';
@@ -25,6 +25,7 @@ class Beat extends React.Component {
         };
 
         this.items = this.initItemState(instruments, subBeats);
+        this.nextBar = this.nextBar.bind(this);
     }
 
     componentDidMount() {
@@ -44,9 +45,25 @@ class Beat extends React.Component {
         });
     }
 
+    componentDidUpdate(prevProps) {
+        if (_.isEqual(prevProps.clock.nextTick, this.props.clock.nextTick)) {
+            return ;
+        }
+
+        if (prevProps.clock.nextTick.beatIndex !== this.props.clock.nextTick.beatIndex) {
+            this.nextBar();
+        }
+    }
+
+    nextBar() {
+        if (this.props.rhythm.isCountIn) {
+            this.player.play(this.snap);
+        }
+    }
+
     playInstrument(instrumentIndex) {
         const instrument = this.state.instruments[instrumentIndex];
-
+console.log("playing ", instrument);
         this.player.play(this[instrument]);
     }
 
@@ -104,7 +121,6 @@ class Beat extends React.Component {
         }
 
         if (isCurrent && itemState === 'active') {
-            console.log("moo");
             this.playInstrument(rowIndex);
         }
 
@@ -125,8 +141,16 @@ class Beat extends React.Component {
     }
 }
 
+Beat.propTypes = {
+    clock: PropTypes.object.isRequired,
+    rhythm: PropTypes.object.isRequired
+};
+
 function mapStateToProps(state) {
-    return {clock: state.clock};
+    return {
+        clock: state.clock,
+        rhythm: state.rhythm
+    };
 }
 
 export default connect(mapStateToProps)(Beat);

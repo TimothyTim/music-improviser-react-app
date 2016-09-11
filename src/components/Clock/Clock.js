@@ -5,8 +5,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as clockActions from '../Actions/clockActions';
 
-// import PianoRoll from '../PianoRoll/PianoRoll.js';
-
 const rhythm = {
     beatsInBar: 4,
     beatSubDivs: 4
@@ -19,8 +17,8 @@ const rhythmicPosition = {
 
 class Clock extends React.Component {
     constructor(props) {
-        super(props)
-        this.bps = 60 / this.props.tempo;
+        super(props);
+        this.bps = 60 / this.props.clock.tempo;
         this.rhythm = {
             beatsInBar: 4,
             beatSubDivs: 4
@@ -43,6 +41,12 @@ class Clock extends React.Component {
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyDown, false);
         this.context = new AudioContext();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.clock.tempo !== prevProps.clock.tempo) {
+            this.bps = 60 / this.props.clock.tempo;
+        }
     }
 
     handleKeyDown(e) {
@@ -89,8 +93,8 @@ class Clock extends React.Component {
 
     stop() {
         cancelAnimationFrame(this.state.frame);
-        this.props.actions.isTicking({isTicking: false});
         this.reset();
+        this.props.actions.isTicking({isTicking: false});
     }
 
     reset() {
@@ -100,9 +104,9 @@ class Clock extends React.Component {
         // this.refs.rhythmMaker.reset(_.cloneDeep(rhythmicPosition));
     }
 
-    setTempo(newTempo) {
-        this.bps = 60 / newTempo;
-    }
+    // setTempo(newTempo) {
+    //     this.bps = 60 / newTempo;
+    // }
 
     schedule() {
         while (this.nextNoteTime <= (this.context.currentTime - this.startTime)) {
@@ -110,7 +114,7 @@ class Clock extends React.Component {
             this.props.actions.nextTick({nextTick: Object.assign({}, this.rhythmicPosition)});
         }
 
-        // PianoRoll().draw();
+        this.props.actions.nextFrame({nextFrame: 'frame'});
 
         this.setState({
             frame: requestAnimationFrame(this.schedule.bind(this))
@@ -163,7 +167,8 @@ class Clock extends React.Component {
 }
 
 Clock.propTypes = {
-    tempo: PropTypes.number.isRequired
+    clock: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

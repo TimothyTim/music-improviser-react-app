@@ -1,7 +1,9 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as rhythmActions from '../Actions/rhythmActions';
 import _ from 'lodash';
-// import Lead from './Lead.js';
+import Lead from './Lead.js';
 import Player from '../Player/Player.js';
 import Chord from './Model/Chord.js';
 import chordSequence from './Model/ChordSequences.js';
@@ -10,7 +12,6 @@ class RhythmMaker extends React.Component {
     constructor(props) {
         super(props);
         this.currentBeat = null;
-        this.countIn = true;
         this.currentChord = null;
         this.setupSequence();
         this.snapShot = null;
@@ -22,8 +23,6 @@ class RhythmMaker extends React.Component {
     componentDidMount() {
         this.snapShot = _.get(this.props, 'clock.nextTick');
         this.player = new Player();
-
-        // this.lead = new Lead();
     }
 
     componentDidUpdate(prevProps) {
@@ -31,42 +30,38 @@ class RhythmMaker extends React.Component {
             return ;
         }
 
-        if (!this.isTicking) {
+        if (!this.props.clock.isTicking) {
+            this.props.actions.isCountIn({isCountIn: true});
             this.stopChords();
+            this.next();
         }
 
         console.log(this.props.clock.nextTick);
-        this.next();
     }
 
     next() {
-        this.currentBeat = this.props.clock.nextTick;
         let {barIndex, beatIndex, subBeatIndex} = _.get(this, 'snapShot');
+        this.currentBeat = this.props.clock.nextTick;
         const nextBarIndex = this.currentBeat.barIndex;
         const nextBeatIndex = this.currentBeat.beatIndex;
         const nextSubBeatIndex = this.currentBeat.subBeatIndex;
 
         if (!_.isEqual(this.snapShot, this.currentBeat)) {
-
+            // each bar
             if (barIndex !== nextBarIndex) {
-                // each bar
-                if (this.countIn && nextBarIndex === 1) {
-                    this.countIn = false;
-                }
-
-                if (!this.countIn) {
+                if (!this.props.rhythm.isCountIn) {
                     this.nextBar();
                 }
             }
 
-            if (beatIndex !== nextBeatIndex) {
-                // each beat
-                if (this.countIn) {
-                    this.nextCountInBeat();
+            // each beat
+            if (beatIndex !== nextBeatIndex && this.props.rhythm.isCountIn) {
+                if (this.props.rhythm.isCountIn && nextBarIndex === 4 && nextBeatIndex === 4) {
+                    this.props.actions.isCountIn({isCountIn: false});
                 }
             }
 
-            if (subBeatIndex !== nextSubBeatIndex && !this.countIn) {
+            if (subBeatIndex !== nextSubBeatIndex && !this.props.rhythm.isCountIn) {
                 // each sub-beat
                 this.nextSubBeat();
             }
@@ -78,8 +73,9 @@ class RhythmMaker extends React.Component {
     }
 
     nextBar() {
+        console.log("PLAYING CHORD");
         // iterate through chord sequence
-        if (this.isCurrentChordFinished()) {
+        if (this.props.clock.isTicking) {
             this.playNextChord();
         }
     }
@@ -88,7 +84,6 @@ class RhythmMaker extends React.Component {
         if (this.isCurrentChordFinished()) {
             this.stopCurrentChord();
         }
-        // this.lead.next();
     }
 
     isCurrentChordFinished() {
@@ -128,8 +123,6 @@ class RhythmMaker extends React.Component {
             this.stopCurrentChord();
             this.setupSequence();
         }
-
-        // this.lead.stop();
     }
 
     setupSequence() {
@@ -138,27 +131,39 @@ class RhythmMaker extends React.Component {
     }
 
     reset(rhythmicPosition) {
-        this.countIn = true;
+        console.log("reset");
+        this.props.actions.isCountIn({isCountIn: true});
         this.snapShot = rhythmicPosition;
-    }
-
-    nextCountInBeat() {
-
     }
 
     render() {
         return (
-            <div></div>
+            <div>
+                <Lead />
+            </div>
         );
     }
 }
 
 RhythmMaker.propTypes = {
-    clock: PropTypes.object.isRequired
+    clock: PropTypes.object.isRequired,
+    rhythm: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
-    return {clock: state.clock};
+    return {
+        clock: state.clock,
+        rhythm: state.rhythm
+    };
 }
 
-export default connect(mapStateToProps)(RhythmMaker);
+function mapDispatchToProps(dispatch) {
+    // defines what actions are avaiable in the Component
+
+    return {
+        actions: bindActionCreators(rhythmActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RhythmMaker);

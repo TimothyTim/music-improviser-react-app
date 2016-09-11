@@ -95,7 +95,8 @@ function mapStateToProps(state) {
     return {
         clock: state.clock,
         rhythm: state.rhythm,
-        lead: state.lead
+        lead: state.lead,
+        frame: state.frame
     };
 }
 

@@ -35,8 +35,6 @@ class Lead extends React.Component {
         if (!this.props.clock.isTicking) {
             this.stop();
         }
-
-        // this.props.actions.leadNote({leadNote: {}});
     }
 
     next() {

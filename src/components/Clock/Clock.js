@@ -4,6 +4,7 @@ import RhythmMaker from '../Rhythm/Rhythm.js';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as clockActions from '../Actions/clockActions';
+import * as frameActions from '../Actions/frameActions';
 
 const rhythm = {
     beatsInBar: 4,
@@ -114,6 +115,7 @@ class Clock extends React.Component {
             this.props.actions.nextTick({nextTick: Object.assign({}, this.rhythmicPosition)});
         }
 
+        // this.props.dispatch(nextFrame({nextFrame: 'frame'}));
         this.props.actions.nextFrame({nextFrame: 'frame'});
 
         this.setState({
@@ -172,14 +174,17 @@ Clock.propTypes = {
 };
 
 function mapStateToProps(state) {
-    return {clock: state.clock};
+    return {
+        clock: state.clock,
+        frame: state.frame
+    };
 }
 
 function mapDispatchToProps(dispatch) {
     // defines what actions are avaiable in the Component
 
     return {
-        actions: bindActionCreators(clockActions, dispatch)
+        actions: bindActionCreators(Object.assign({}, clockActions, frameActions), dispatch)
     };
 }
 

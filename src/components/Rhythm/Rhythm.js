@@ -25,10 +25,10 @@ class RhythmMaker extends React.Component {
         this.player = new Player();
     }
 
-    componentDidUpdate(prevProps) {
-        if (_.isEqual(prevProps.clock.nextTick, this.props.clock.nextTick)) {
-            return ;
-        }
+    componentDidUpdate() {
+        // if (_.isEqual(prevProps.clock.nextTick, this.props.clock.nextTick)) {
+        //     return ;
+        // }
 
         if (!this.props.clock.isTicking) {
             this.props.actions.isCountIn({isCountIn: true});

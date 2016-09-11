@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 function MonoSynth(context) {
     this.context = context;
     this.osc = this.context.createOscillator();
@@ -13,8 +11,8 @@ function MonoSynth(context) {
     this.oscGain.connect(this.context.destination);
 
     this.notesPlaying = {};
-    this.attackTime = $('.attackTime');
-    this.masterVolume = $('.slider');
+    this.attackTime = 10;
+    this.masterVolume = 20;
 }
 
 MonoSynth.prototype.isEmpty = function(obj) {

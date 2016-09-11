@@ -1,25 +1,43 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import _ from 'lodash';
+import {bindActionCreators} from 'redux';
+import * as clockActions from '../Actions/clockActions';
 
 class Settings extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.changeTempo = this.changeTempo.bind(this);
+    }
+
+    changeTempo(e) {
+        const upperLimit = 200;
+        const lowerLimit = 40;
+        let {value} = e.currentTarget;
+
+        if (value < lowerLimit) {
+            value = lowerLimit;
+        } else if (value > upperLimit) {
+            value = upperLimit;
+        }
+
+        this.props.actions.tempo({ tempo: value });
+    }
 
     render() {
-        const {tempo, changeTempo, isOpen} = this.props;
+        const {isOpen} = this.props;
+        // const tempo = _.get(this.props, 'clock.tempo', 60);
+        // <div>
+        //     <h2>Master settings</h2>
+        //     <label>Tempo: </label>
+        //     <input type="number" min="20" max="200" defaultValue={tempo} className="tempo" onChange={this.changeTempo} />
+        //     <br />
+        // </div>
         const hideClass = isOpen ? 'show' : 'hide';
         return (
             <div className={`tool settings ${hideClass}`}>
                 <div>
-                    <h2>Master settings</h2>
-                    <label>Tempo: </label>
-                    <input type="number" min="20" max="200" defaultValue={tempo} className="tempo" onChange={changeTempo} /><br />
-                </div>
-                <div>
-                    <h2>Synth Settings</h2>
-                    <label>Volume: </label>
-                    <input type="range" min="0" max="80" defaultValue="20" className="slider" /><br />
-                    <label>Attack Time (ms): </label>
-                    <input type="number" min="0" max="3000" defaultValue="10" className="attackTime" /><br />
-                    <label>Release Time (ms): </label>
-                    <input type="number" min="0" max="3000" defaultValue="200" className="releaseTime" /><br />
                     <h3>Midi Input Device: </h3>
                     <table id="midi_source">
                         <tbody>
@@ -45,9 +63,23 @@ class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-    tempo: PropTypes.number.isRequired,
-    changeTempo: PropTypes.func.isRequired,
-    isOpen: PropTypes.bool.isRequired
+    clock: PropTypes.object.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+    actions: PropTypes.object.isRequired
 };
 
-export default Settings;
+function mapStateToProps(state) {
+    return {
+        clock: state.clock
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    // defines what actions are avaiable in the Component
+
+    return {
+        actions: bindActionCreators(clockActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

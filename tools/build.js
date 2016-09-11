@@ -11,7 +11,7 @@ process.env.NODE_ENV = 'production'; // this assures React is built in prod mode
 
 console.log(chalk.processing('Generating js config file...'));
 
-fs.writeFileSync('src/constants/config.js', "export default { GOOGLE_TRACKING_ID: '" + process.env.GOOGLE_TRACKING_ID + "' };", 'utf8', (writeError) => {
+fs.writeFileSync('src/constants/config.js', "export default { GOOGLE_TRACKING_ID: '" + process.env.GOOGLE_TRACKING_ID + "', ENV: 'development' };", 'utf8', (writeError) => {
   if (writeError) {
     return console.log(chalk.error(writeError));
   }

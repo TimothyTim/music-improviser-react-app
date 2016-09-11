@@ -1,20 +1,18 @@
-import $ from 'jquery';
-
 function MyPolySynth(context) {
     this.context = context;
     this.osc = {};
     this.oscGain = {};
     this.oscillators = [];
-    this.attackTime = $('.attackTime');
-    this.releaseTime = $('.releaseTime');
-    this.masterVolume = $('.slider');
+    this.attackTime = 10;
+    this.releaseTime = 200;
+    this.masterVolume = 20;
 }
 
 MyPolySynth.prototype.start = function(note) {
-    const masterVolume = this.masterVolume.val() / 100;
+    const masterVolume = this.masterVolume / 100;
     const noteGain = note.gain * masterVolume;
     const currTime = this.context.currentTime;
-    const attackTime = this.attackTime.val() / 1000;
+    const attackTime = this.attackTime / 1000;
 
     this.noteGainOnAttack = noteGain; // for linear rampdown
 
@@ -33,7 +31,7 @@ MyPolySynth.prototype.start = function(note) {
 };
 
 MyPolySynth.prototype.stop = function(note) {
-    const releaseTime = this.releaseTime.val() / 1000;
+    const releaseTime = this.releaseTime / 1000;
     const currTime = this.context.currentTime;
 
     //Decay
@@ -46,13 +44,11 @@ MyPolySynth.prototype.stop = function(note) {
         currTime + releaseTime
     );
 
-    delete this.oscGain[note.name];
-
-    console.log(this.oscGain);
+    // delete this.oscGain[note.name];
 };
 
 MyPolySynth.prototype.stopAll = function() {
-    const releaseTime = this.releaseTime.val() / 1000;
+    const releaseTime = this.releaseTime / 1000;
     const currTime = this.context.currentTime;
 
     for (let note in this.oscGain) {

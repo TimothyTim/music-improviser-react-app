@@ -1,0 +1,34 @@
+.tabs {
+    height: 100%;
+
+    &__labels {
+        margin-bottom: 5px;
+        height: 10%;
+
+        &__link {
+            display: inline-block;
+            border-radius: 30px;
+            border: 1px solid $palette-concrete;
+            background-color: $palette-emerald-subtle;
+            padding: 5px;
+            margin-right: 5px;
+
+            &__text {
+                padding: 0 5px;
+            }
+        }
+    }
+
+    &__content {
+        height: 90%;
+
+        &__container {
+            height: 100%;
+            border: 1px solid $palette-wet-asphalt;
+        }
+    }
+}
+
+.pane {
+    height: 100%;
+}

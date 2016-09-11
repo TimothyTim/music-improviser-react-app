@@ -55,18 +55,25 @@ class Player {
     }
 
     trigger(action, notes, synthType) {
+        if (!synthType) synthType = 'myPolySynth';
+        let synth = this[synthType];
         let _this = this;
+
+        if (action === 'stop') {
+            synth.stopAll();
+            return ;
+        }
 
         notes.forEach(function(note) {
             let noteWithFreq = _this.addFrequencyToNote(note);
-            let synth = _this[synthType];
 
             switch(action) {
                 case 'on':
                     synth.start(noteWithFreq);
                     break;
                 case 'off':
-                    synth.stop(noteWithFreq);
+                    // synth.stop(noteWithFreq);
+                    synth.stopAll(noteWithFreq);
                     break;
                 default:
                     alert('Unrecognised player trigger');

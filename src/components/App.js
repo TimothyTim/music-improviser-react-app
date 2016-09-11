@@ -5,16 +5,15 @@ import Settings from './Settings/Settings.js';
 import Help from './Help/Help.js';
 import Toolbar from './Toolbar/Toolbar.js';
 import PianoRoll from './PianoRoll/PianoRoll.js';
+import Tabs from './Tabs/Tabs.js';
+import Pane from './Pane/Pane.js';
+import Beat from './Beat/Beat.js';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
 
-        this.clock = null;
-        this.togglePlay = this.togglePlay.bind(this);
         this.toggleTool = this.toggleTool.bind(this);
-        this.changeTempo = this.changeTempo.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
         this.state = {
             isPlaying: false,
             tempo: 60,
@@ -33,51 +32,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        document.addEventListener('keydown', this.handleKeyDown, false);
-        this.clock = Clock(this.state.tempo);
         inputs.bind();
-        this.pianoRoll = PianoRoll(document.getElementById('piano-roll'));
-    }
-
-    changeTempo(e) {
-        const upperLimit = 200;
-        const lowerLimit = 40;
-        let {value} = e.currentTarget;
-
-        if (value < lowerLimit) {
-            value = lowerLimit;
-        } else if (value > upperLimit) {
-            value = upperLimit;
-        }
-
-        this.clock.setTempo(value);
-    }
-
-    handleKeyDown(e) {
-        const keyCode = e.keyCode || e.which;
-        const isInsideInput = e.target.tagName.toLowerCase().match(/input|textarea/);
-        if (isInsideInput) {
-            return;
-        }
-
-        if (keyCode === 32) {
-            e.preventDefault();
-            this.togglePlay();
-        }
-        if (keyCode === 27) {
-            e.preventDefault();
-            this.toggleTool(null);
-        }
-    }
-
-    togglePlay() {
-        if (this.state.isPlaying) {
-            this.clock.stop();
-        } else {
-            this.clock.start();
-        }
-
-        this.setState({isPlaying: !this.state.isPlaying});
     }
 
     toggleTool(tool) {
@@ -90,20 +45,23 @@ class App extends React.Component {
     }
 
     render() {
-        const {isPlaying, tempo, activeTool, tools} = this.state;
-        const playClass = isPlaying ? 'pause' : 'play';
-        const mainActive = isPlaying ? 'active' : '';
+        const {activeTool, tools} = this.state;
 
         return (
             <div className="app">
-                <div id="piano-roll"></div>
-                <div className="controls">
-                    <button className={`controls__start ${mainActive}`} onClick={this.togglePlay}>
-                        <i className={`fa fa-${playClass}-circle`} aria-hidden="true"></i>
-                    </button>
+                <div className="app__window">
+                    <Tabs selected={0}>
+                        <Pane label="Lead Improv">
+                            <PianoRoll />
+                        </Pane>
+                        <Pane label="Beat">
+                            <Beat />
+                        </Pane>
+                    </Tabs>
                 </div>
+                <Clock tempo={this.state.tempo} />
                 <Toolbar tools={tools} activeTool={activeTool} toggleTool={this.toggleTool} />
-                <Settings isOpen={activeTool === 'settings'} changeTempo={this.changeTempo} tempo={tempo} />
+                <Settings isOpen={activeTool === 'settings'} />
                 <Help isOpen={activeTool === 'help'} />
             </div>
         );

@@ -1,56 +1,70 @@
+import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as rhythmActions from '../Actions/rhythmActions';
 import _ from 'lodash';
 import Lead from './Lead.js';
 import Player from '../Player/Player.js';
 import Chord from './Model/Chord.js';
 import chordSequence from './Model/ChordSequences.js';
 
-class RhythmMaker {
-    constructor(snapShot) {
-        let _this = this;
-        this.snapShot = snapShot;
+class RhythmMaker extends React.Component {
+    constructor(props) {
+        super(props);
         this.currentBeat = null;
-        this.countIn = true;
-        this.player = new Player();
-        this.lead = new Lead();
         this.currentChord = null;
         this.setupSequence();
+        this.snapShot = null;
+        this.player = null;
+        this.sameBeat = null;
 
-        this.player.loadMulti(['/public/audio/kick.wav', '/public/audio/snap.wav'], function(bufferList) {
-            _this.kick = bufferList[0];
-            _this.snap = bufferList[1];
-        });
+        this.next = this.next.bind(this);
     }
 
-    next(beatObject) {
-        this.currentBeat = beatObject;
-        let {barIndex, beatIndex, subBeatIndex} = this.snapShot;
+    componentDidMount() {
+        this.snapShot = _.get(this.props, 'clock.nextTick');
+        this.player = new Player();
+    }
+
+    componentDidUpdate(prevProps) {
+        this.sameBeat = _.isEqual(prevProps.clock.nextTick, this.props.clock.nextTick);
+
+        if (this.sameBeat) {
+            return ;
+        }
+
+        if (!this.props.clock.isTicking) {
+            this.props.actions.isCountIn({isCountIn: true});
+            this.stopChords();
+            return ;
+        }
+
+        this.next();
+    }
+
+    next() {
+        let {barIndex, beatIndex, subBeatIndex} = _.get(this, 'snapShot');
+        this.currentBeat = this.props.clock.nextTick;
         const nextBarIndex = this.currentBeat.barIndex;
         const nextBeatIndex = this.currentBeat.beatIndex;
         const nextSubBeatIndex = this.currentBeat.subBeatIndex;
 
         if (!_.isEqual(this.snapShot, this.currentBeat)) {
-
+            // each bar
             if (barIndex !== nextBarIndex) {
-                // each bar
-                if (this.countIn && nextBarIndex === 1) {
-                    this.countIn = false;
-                }
-
-                if (!this.countIn) {
+                if (!this.props.rhythm.isCountIn) {
                     this.nextBar();
                 }
             }
 
-            if (beatIndex !== nextBeatIndex) {
-                // each beat
-                if (!this.countIn) {
-                    this.nextBeat();
-                } else {
-                    this.nextCountInBeat();
+            // each beat
+            if (beatIndex !== nextBeatIndex && this.props.rhythm.isCountIn) {
+                if (this.props.rhythm.isCountIn && nextBarIndex === 4 && nextBeatIndex === 4) {
+                    this.props.actions.isCountIn({isCountIn: false});
                 }
             }
 
-            if (subBeatIndex !== nextSubBeatIndex && !this.countIn) {
+            if (subBeatIndex !== nextSubBeatIndex && !this.props.rhythm.isCountIn) {
                 // each sub-beat
                 this.nextSubBeat();
             }
@@ -63,19 +77,15 @@ class RhythmMaker {
 
     nextBar() {
         // iterate through chord sequence
-        this.playNextChord();
-    }
-
-    nextBeat() {
-        this.player.play(this.kick);
+        if (this.props.clock.isTicking) {
+            this.playNextChord();
+        }
     }
 
     nextSubBeat() {
         if (this.isCurrentChordFinished()) {
             this.stopCurrentChord();
         }
-
-        this.lead.next();
     }
 
     isCurrentChordFinished() {
@@ -106,7 +116,8 @@ class RhythmMaker {
     }
 
     stopCurrentChord() {
-        this.player.trigger('off', this.currentChord.getNotes(false), 'myPolySynth');
+        // this.player.trigger('off', this.currentChord.getNotes(false), 'myPolySynth');
+        this.player.trigger('stop');
         this.currentChord = null;
     }
 
@@ -115,23 +126,46 @@ class RhythmMaker {
             this.stopCurrentChord();
             this.setupSequence();
         }
-
-        this.lead.stop();
     }
 
     setupSequence() {
         this.sequenceEntries = chordSequence.sequence1.entries();
-        // this.sequenceEntries = chordSequence.sequence1;
     }
 
     reset(rhythmicPosition) {
-        this.countIn = true;
+        console.log("reset");
+        this.props.actions.isCountIn({isCountIn: true});
         this.snapShot = rhythmicPosition;
     }
 
-    nextCountInBeat() {
-        this.player.play(this.snap);
+    render() {
+        return (
+            <div>
+                <Lead />
+            </div>
+        );
     }
 }
 
-export default RhythmMaker;
+RhythmMaker.propTypes = {
+    clock: PropTypes.object.isRequired,
+    rhythm: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state) {
+    return {
+        clock: state.clock,
+        rhythm: state.rhythm
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    // defines what actions are avaiable in the Component
+
+    return {
+        actions: bindActionCreators(rhythmActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RhythmMaker);

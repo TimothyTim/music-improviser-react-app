@@ -46,4 +46,20 @@ Music.prototype.getBaseLog = function(value, base) {
     return Math.log(value) / Math.log(base);
 };
 
+Music.prototype.convertLinearValToBeatPos = function(linearVal) {
+    const beatLength = 4;
+    const breakdown = (linearVal + 1) / beatLength;
+    const beatIndex = Math.ceil(breakdown);
+    const subBeatIndex = (((linearVal/beatLength) % 1) * 4) + 1;
+
+    return {
+        beatIndex: beatIndex,
+        subBeatIndex: subBeatIndex
+    };
+};
+
+Music.prototype.convertBeatPosToLinearVal = function(beatPos) {
+    return (((beatPos.beatIndex - 1) * 4) + beatPos.subBeatIndex) - 1; // 0 - 15
+};
+
 export default new Music();

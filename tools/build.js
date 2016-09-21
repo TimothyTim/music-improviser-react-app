@@ -1,6 +1,5 @@
 // More info on Webpack's Node API here: https://webpack.github.io/docs/node.js-api.html
 // Allowing console calls below since this is a build file.
-require('dotenv').config();
 const fs = require('fs');
 const webpack = require('webpack');
 const ncp = require('ncp');

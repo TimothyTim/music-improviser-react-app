@@ -1,4 +1,3 @@
-require('dotenv').config();
 const devServer = require('./tools/devServer');
 const prodServer = require('./tools/server');
 
